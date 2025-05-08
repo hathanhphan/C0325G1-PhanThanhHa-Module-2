@@ -4,13 +4,13 @@ import java.util.Scanner;
 
 public class ReadNumberToString {
     public static void main(String[] args) {
-        String[] onesString = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+        String[] onesString = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
         String[] tensString = {"", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
         String[] tenToNineteenString = {"ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter a number: ");
         int number = sc.nextInt();
-        if (number > 999) {
+        if (number < 0 || number > 999) {
             System.out.printf("%d is out of ability", number);
             return;
         }
@@ -35,6 +35,8 @@ public class ReadNumberToString {
             }
             if (ones != 0) {
                 System.out.print(onesString[ones]);
+            } else if (number == 0) {
+                System.out.print(onesString[number]);
             }
         }
     }
