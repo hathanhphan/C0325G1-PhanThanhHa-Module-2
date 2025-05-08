@@ -4,54 +4,38 @@ import java.util.Scanner;
 
 public class ReadNumberToString {
     public static void main(String[] args) {
-        String[] onesString = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+        String[] onesString = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
         String[] tensString = {"", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
         String[] tenToNineteenString = {"ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter a number: ");
         int number = sc.nextInt();
-        int hundreds = -1;
-        int tens = -1;
-        int ones = -1;
-        if (number <= 9) {
-            ones = number;
-        } else if (number <= 99) {
-            ones = number % 10;
-            tens = number / 10;
-        } else if (number <= 999) {
-            ones = number % 10;
-            number = number / 10;
-            tens = number % 10;
-            hundreds = number / 10;
-        } else {
+        if (number > 999) {
             System.out.printf("%d is out of ability", number);
+            return;
         }
-        String result = "";
-        if (ones != -1) {
-            if (tens != -1) {
-                if (tens * 10 + ones > 9 && tens * 10 + ones < 20) {
-                    result = tenToNineteenString[tens * 10 + ones - 10];
-                } else {
-                    if (ones != 0) {
-                        result = onesString[ones];
-                    }
-                    if (tens != 0) {
-                        result = tensString[tens] + " " +  result;
-                    }
-                }
-                if (hundreds != -1) {
-                    if (!result.isEmpty()) {
-                        result = onesString[hundreds] + " hundred and " + result;
-                    } else {
-                        result = onesString[hundreds] + " hundred";
-                    }
-                }
-            } else {
-                result = onesString[ones];
+        int ones = number % 10;
+        number = number / 10;
+        int tens = number % 10;
+        number = number / 10;
+        int hundreds = number % 10;
+        System.out.print("Result is: ");
+        if (hundreds != 0) {
+            System.out.print(onesString[hundreds] + " hundred");
+            if (ones != 0 || tens != 0) {
+                System.out.print(" and ");
             }
         }
-        if (!result.isEmpty()) {
-            System.out.println("Result: " + result);
+        int numberInDozen = tens * 10 + ones;
+        if (numberInDozen > 9 && numberInDozen < 20) {
+            System.out.print(tenToNineteenString[numberInDozen - 10]);
+        } else {
+            if (tens != 0) {
+                System.out.print(tensString[tens] + " ");
+            }
+            if (ones != 0) {
+                System.out.print(onesString[ones]);
+            }
         }
     }
 }
