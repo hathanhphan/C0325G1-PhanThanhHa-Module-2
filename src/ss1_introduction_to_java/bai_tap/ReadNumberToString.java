@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 public class ReadNumberToString {
     public static void main(String[] args) {
-        String[] onesString  = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
-        String[] tensString  = {"", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
+        String[] onesString = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+        String[] tensString = {"", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
         String[] tenToNineteenString = {"ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter a number: ");
