@@ -1,4 +1,4 @@
-package ss3_array_and_method_in_java.thuc_hanh;
+package ss3_array_and_method_in_java.bai_tap;
 
 import ss3_array_and_method_in_java.helpers.ArrayIO;
 
