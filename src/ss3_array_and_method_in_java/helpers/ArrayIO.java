@@ -33,23 +33,32 @@ public class ArrayIO {
         return inputInt(min, max, "Nhập số lượng phần tử của mảng: ");
     }
 
-    public static int[][] input2DMatrixInt(int min, int max, String messageRow, String messageCol) {
+    public static float[][] input2DMatrixFloat(int min, int max, String messageRow, String messageCol, boolean isSquare) {
         Scanner sc = new Scanner(System.in);
-        int[][] matrix;
+        float[][] matrix;
         int row = inputNumOfElement(min, max, messageRow);
-        int col = inputNumOfElement(min, max, messageCol);
-        matrix = new int[row][col];
+        int col;
+        if (isSquare) {
+            col = row;
+        } else {
+            col = inputNumOfElement(min, max, messageCol);
+        }
+        matrix = new float[row][col];
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 System.out.printf("Nhập phần tử [%d][%d]: ", i, j);
-                matrix[i][j] = sc.nextInt();
+                matrix[i][j] = sc.nextFloat();
             }
         }
         return matrix;
     }
 
-    public static int[][] input2DMatrixInt(int min, int max) {
-        return input2DMatrixInt(min, max, "Nhập số hàng: ", "Nhập số cột: ");
+    public static float[][] input2DMatrixFloat(int min, int max) {
+        return input2DMatrixFloat(min, max, "Nhập số hàng: ", "Nhập số cột: ", false);
+    }
+
+    public static float[][] input2DSquareMatrixFloat(int min, int max) {
+        return input2DMatrixFloat(min, max, "Nhập số hàng = số cột: ", "", true);
     }
 
     public static void outputInt(int[] array, String titleMessage) {
@@ -57,22 +66,21 @@ public class ArrayIO {
             System.out.printf("%-20s%s", titleMessage, "");
         }
         for (int i : array) {
-            System.out.print(i + "\t");
+            System.out.printf(i + "\t");
         }
         System.out.println();
     }
 
-    public static void output2DMatrixInt(int[][] matrix, String titleMessage) {
+    public static void output2DMatrixFloat(float[][] matrix, String titleMessage) {
         if (!titleMessage.isEmpty()) {
             System.out.printf("%-20s%s\n", titleMessage, "");
         }
-        for (int[] i : matrix) {
-            for (int j : i) {
-                System.out.print(j + "\t");
+        for (float[] i : matrix) {
+            for (float j : i) {
+                System.out.printf("%-10.2f", j);
             }
             System.out.println();
         }
-        System.out.println();
     }
 
     public static int maxInt(int[] array) {
@@ -133,11 +141,11 @@ public class ArrayIO {
         return mergeArray;
     }
 
-    public static int[] maxIn2DMatrixInt(int[][] matrix) {
-        int max = matrix[0][0];
+    public static int[] maxIn2DMatrixFloat(float[][] matrix) {
+        float max = matrix[0][0];
         int indexRow = 0;
         int indexCol = 0;
-        for (int i = 1; i < matrix.length; i++) {
+        for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
                 if (matrix[i][j] > max) {
                     max = matrix[i][j];
@@ -147,5 +155,24 @@ public class ArrayIO {
             }
         }
         return new int[]{ indexRow, indexCol };
+    }
+
+    public static double sumColIn2DMatrixFloat(float[][] matrix, int col) {
+        double sum = 0;
+        if (col < 0 || col >= matrix[0].length) {
+            return Double.MIN_VALUE;
+        }
+        for (float[] element : matrix) {
+            sum += element[col];
+        }
+        return sum;
+    }
+
+    public static double sumMainDiagonalIn2DMatrixFloat(float[][] matrix) {
+        double sum = 0;
+        for (int i = 0; i < matrix.length; i++) {
+            sum += matrix[i][i];
+        }
+        return sum;
     }
 }
