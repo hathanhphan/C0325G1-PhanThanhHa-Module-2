@@ -17,20 +17,20 @@ public class ArrayIO {
         } while (number < min || number > max);
         return number;
     }
-    public static int[] inputInt(int min, int max, String message) {
+    public static int[] inputInt(int min, int max, String message, String subMessage) {
         Scanner sc = new Scanner(System.in);
         int[] array;
         int size = inputNumOfElement(min, max, message);
         array = new int[size];
         for (int i = 0; i < size; i++) {
-            System.out.print("Nhập phần tử thứ " + (i + 1) + ": ");
+            System.out.print(subMessage + (i + 1) + ": ");
             array[i] = sc.nextInt();
         }
         return array;
     }
 
     public static int[] inputInt(int min, int max) {
-        return inputInt(min, max, "Nhập số lượng phần tử của mảng: ");
+        return inputInt(min, max, "Nhập số lượng phần tử của mảng: ", "Nhập phần tử thứ ");
     }
 
     public static float[][] input2DMatrixFloat(int min, int max, String messageRow, String messageCol, boolean isSquare) {
