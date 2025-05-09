@@ -1,27 +1,32 @@
 package ss2_loop_in_java.bai_tap;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class DisplayShape {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int yourChoice = inputChoice(sc);
-        while (yourChoice != 4) {
-            switch (yourChoice) {
-                case 1:
-                    printRectangle(sc);
-                    break;
-                case 2:
-                    printSquareTriangle(sc);
-                    break;
-                case 3:
-                    printIsoscelesTriangle(sc);
-                    break;
+        try {
+            Scanner sc = new Scanner(System.in);
+            int yourChoice = inputChoice(sc);
+            while (yourChoice != 4) {
+                switch (yourChoice) {
+                    case 1:
+                        printRectangle(sc);
+                        break;
+                    case 2:
+                        printSquareTriangle(sc);
+                        break;
+                    case 3:
+                        printIsoscelesTriangle(sc);
+                        break;
+                }
+                System.out.println();
+                yourChoice = inputChoice(sc);
             }
-            System.out.println();
-            yourChoice = inputChoice(sc);
+            System.out.println("Đã kết thúc chương trình");
+        } catch (InputMismatchException e) {
+            System.out.println("Bạn nhập giá trị không phải kiểu số. Kết thúc chương trình.");
         }
-        System.out.println("Đã kết thúc chương trình");
     }
 
     private static int inputChoice(Scanner sc) {
