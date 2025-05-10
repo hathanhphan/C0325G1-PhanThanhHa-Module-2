@@ -25,7 +25,7 @@ public class DisplayShape {
             }
             System.out.println("Đã kết thúc chương trình");
         } catch (InputMismatchException e) {
-            System.out.println("Bạn nhập giá trị không phải kiểu số. Kết thúc chương trình.");
+            System.out.println("Bạn nhập giá trị không phải kiểu số nguyên. Kết thúc chương trình.");
         }
     }
 
