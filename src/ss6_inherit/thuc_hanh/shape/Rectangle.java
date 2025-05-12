@@ -1,6 +1,8 @@
 package ss6_inherit.thuc_hanh.shape;
 
-public class Rectangle extends Shape {
+import ss7_abstract_class_and_interface.bai_tap.resizable.Resizable;
+
+public class Rectangle extends Shape implements Resizable {
     private double width = 1;
     private double length = 1;
 
@@ -49,5 +51,11 @@ public class Rectangle extends Shape {
                 + getLength()
                 + ", which is a subclass of "
                 + super.toString();
+    }
+
+    @Override
+    public void resize(double percent) {
+        setLength(getLength() * (1 + percent / 100));
+        setWidth(getLength() * (1 + percent / 100));
     }
 }
