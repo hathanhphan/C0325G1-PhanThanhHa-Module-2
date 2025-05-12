@@ -5,6 +5,10 @@ public class Main {
         Circle circle = new Circle(5, "red");
         Cylinder cylinder = new Cylinder(5, "red", 10);
         System.out.println(circle);
+        System.out.println("Area: " + circle.getArea());
+        System.out.println("Perimeter: " + circle.getPerimeter());
         System.out.println(cylinder);
+        System.out.println("Area: " + cylinder.getArea());
+        System.out.println("Volume: " + cylinder.getVolume());
     }
 }
