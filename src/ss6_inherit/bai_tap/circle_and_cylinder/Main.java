@@ -9,6 +9,7 @@ public class Main {
         System.out.println("Perimeter: " + circle.getPerimeter());
         System.out.println(cylinder);
         System.out.println("Area: " + cylinder.getArea());
+        System.out.println("Perimeter: " + cylinder.getPerimeter());
         System.out.println("Volume: " + cylinder.getVolume());
     }
 }
