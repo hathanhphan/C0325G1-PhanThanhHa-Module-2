@@ -14,13 +14,15 @@ public class Main {
             new Rectangle("grey", false, 20, 10),
             new Circle("yellow", true, 8.5)
         };
-        Random random = new Random();
-        int randomNumber;
+
         System.out.println("Before resizing:");
         for (Shape shape: shapes) {
             System.out.println(shape);
         }
         System.out.println();
+
+        Random random = new Random();
+        int randomNumber;
         for (Shape shape: shapes) {
             randomNumber = random.nextInt(100) + 1;
             if (shape instanceof Circle) {
@@ -31,6 +33,7 @@ public class Main {
                 ((Rectangle) shape).resize(randomNumber);
             }
         }
+
         System.out.println("After resizing:");
         for (Shape shape: shapes) {
             System.out.println(shape);
