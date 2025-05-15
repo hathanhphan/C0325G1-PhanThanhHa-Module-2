@@ -34,10 +34,11 @@ public class Circle extends Shape implements Resizable {
 
     @Override
     public String toString() {
-        return "A Circle with radius="
-                + getRadius()
-                + ", which is a subclass of "
-                + super.toString();
+        return "A " + this.getClass().getSimpleName() + " with radius = "
+                + getRadius() + ", color of "
+                + getColor()
+                + " and "
+                + (isFilled() ? "filled" : "not filled");
     }
 
     @Override

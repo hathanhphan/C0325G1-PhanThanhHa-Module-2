@@ -29,7 +29,7 @@ public class Shape {
 
     @Override
     public String toString() {
-        return "A Shape with color of "
+        return "A " + this.getClass().getSimpleName() + " with color of "
                 + getColor()
                 + " and "
                 + (isFilled() ? "filled" : "not filled");

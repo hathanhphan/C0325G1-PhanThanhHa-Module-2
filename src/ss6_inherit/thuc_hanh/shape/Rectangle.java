@@ -45,17 +45,17 @@ public class Rectangle extends Shape implements Resizable {
 
     @Override
     public String toString() {
-        return "A Rectangle with width="
-                + getWidth()
-                + " and length="
-                + getLength()
-                + ", which is a subclass of "
-                + super.toString();
+        return "A " + this.getClass().getSimpleName() + " with width = "
+                + getWidth() + ", length = "
+                + getLength() + ", color of "
+                + getColor()
+                + " and "
+                + (isFilled() ? "filled" : "not filled");
     }
 
     @Override
     public void resize(double percent) {
         setLength(getLength() * (1 + percent / 100));
-        setWidth(getLength() * (1 + percent / 100));
+        setWidth(getWidth() * (1 + percent / 100));
     }
 }

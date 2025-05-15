@@ -25,14 +25,20 @@ public class Square extends Rectangle implements Resizable, Colorable {
 
     @Override
     public String toString() {
-        return "A Square with side="
-                + getSide()
-                + ", which is a subclass of "
-                + super.toString();
+        return "A " + this.getClass().getSimpleName() + " with side = "
+                + getSide() + ", color of "
+                + getColor()
+                + " and "
+                + (isFilled() ? "filled" : "not filled");
+    }
+
+    @Override
+    public void resize(double percent) {
+        setSide(getSide() * (1 + percent / 100));
     }
 
     @Override
     public void howToColor() {
-        System.out.println("Color all four sides");
+        System.out.println(this.getClass().getSimpleName() + ": Color all four sides");
     }
 }
