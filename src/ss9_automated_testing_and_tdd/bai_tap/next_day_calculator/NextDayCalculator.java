@@ -1,4 +1,4 @@
-package ss9_automated_testing_and_tdd.bai_tap;
+package ss9_automated_testing_and_tdd.bai_tap.next_day_calculator;
 
 public class NextDayCalculator {
     public static int[] calculateNextDay(int day, int month, int year) {
