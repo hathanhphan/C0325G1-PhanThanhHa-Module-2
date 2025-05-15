@@ -32,11 +32,6 @@ public class Square extends Rectangle implements Resizable, Colorable {
     }
 
     @Override
-    public void resize(double percent) {
-        setSide(getSide() * (1 + percent / 100));
-    }
-
-    @Override
     public void howToColor() {
         System.out.println("Color all four sides");
     }

@@ -197,23 +197,18 @@ public class Validation {
      * Checks if a string is unique among a list of objects of any type,
      * based on a field extracted by the provided extractor function.
      *
-     * @param <T>            The type of objects in the list
      * @param str            The string to check for uniqueness
      * @param objects        The list of objects to check against
      * @param fieldExtractor Function that extracts the field value to compare with
      * @return true if the string is unique, false otherwise
      */
-    public static <T> boolean isUnique(String str, ArrayList<T> objects,
-                                       Function<T, String> fieldExtractor) {
-        // Validate input parameters
-        if (str == null || objects == null || fieldExtractor == null) {
+    public static <E, F> boolean isUnique(F value, ArrayList<E> objects, Function<E, F> fieldExtractor) {
+        if (value == null || objects == null || fieldExtractor == null) {
             return false;
         }
-
-        // Check if no object in the list has a matching field value
         return objects.stream()
                 .filter(Objects::nonNull)
-                .noneMatch(obj -> str.equals(fieldExtractor.apply(obj)));
+                .noneMatch(obj -> Objects.equals(value, fieldExtractor.apply(obj)));
     }
 
     /**
