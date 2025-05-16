@@ -17,11 +17,6 @@ public class Cylinder extends Circle {
     }
 
     @Override
-    public double getPerimeter() {
-        return super.getPerimeter() + height;
-    }
-
-    @Override
     public double getArea() {
         return super.getPerimeter() * height + 2 * super.getArea();
     }
