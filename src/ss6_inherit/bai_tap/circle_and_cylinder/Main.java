@@ -7,7 +7,6 @@ public class Main {
         System.out.println(circle);
         System.out.println("Area: " + circle.getArea());
         System.out.println(cylinder);
-        System.out.println("Area: " + cylinder.getArea());
         System.out.println("Volume: " + cylinder.getVolume());
     }
 }
