@@ -37,8 +37,7 @@ public class Main {
     }
     public static void printArea(Shape[] shapes) {
         for (Shape shape: shapes) {
-            System.out.print(shape.getClass().getSimpleName() + ": Area is ");
-            System.out.println(shape.getArea());
+            System.out.println(shape.getClass().getSimpleName() + ": Area is " + shape.getArea());
         }
     }
 }

@@ -13,8 +13,7 @@ public class Main {
                 new Circle("yellow", true, 15.9)
         };
         for (Shape shape: shapes) {
-            System.out.print(shape.getClass().getSimpleName() + ": Area is ");
-            System.out.println(shape.getArea());
+            System.out.println(shape.getClass().getSimpleName() + ": Area is " + shape.getArea());
             if (shape instanceof Colorable) {
                 ((Colorable) shape).howToColor();
             }

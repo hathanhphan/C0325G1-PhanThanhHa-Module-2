@@ -1,6 +1,6 @@
 package ss11_dsa.bai_tap.queue_use_circular_linked_list;
 
-public class Queue {
+public class CircularQueue {
     class Node {
         int data;
         Node next;
@@ -10,34 +10,59 @@ public class Queue {
             this.next = null;
         }
     }
-    
+
     private Node front;
     private Node rear;
 
-    public Queue() {
+    public CircularQueue() {
         this.front = null;
         this.rear = null;
     }
 
-    public void enQueue(int element) {
-        Node node = new Node(element);
-        if (this.front == null) {
-            this.front = this.rear = node;
+    public boolean isEmpty() {
+        return front == null;
+    }
+
+    public void enQueue(int value) {
+        Node newNode = new Node(value);
+        if (isEmpty()) {
+            front = newNode;
+            rear = newNode;
+            rear.next = front;
         } else {
-            this.rear = node;
-            this.rear.link = this.front;
+            newNode.next = front;
+            rear.next = newNode;
+            rear = newNode;
         }
     }
-    public Node deQueue() {
-        if (this.front == null) {
+
+    public Integer deQueue() {
+        if (isEmpty()) {
+            System.out.println("Queue is empty");
             return null;
-        } else if (this.front == this.rear) {
-            this.front = this.rear = null;
-        } else {
-            this.front = this.front.link;
-            this.rear.link = this.front;
         }
+        int value = front.data;
+        if (front == rear) {
+            front = null;
+            rear = null;
+        } else {
+            front = front.next;
+            rear.next = front;
+        }
+        return value;
     }
-    public void displayQueue() {
+
+    public void display() {
+        if (isEmpty()) {
+            System.out.println("Queue is empty");
+            return;
+        }
+        Node temp = front;
+        System.out.print("Elements in queue: ");
+        do {
+            System.out.print(temp.data + "\t");
+            temp = temp.next;
+        } while (temp != front);
+        System.out.println();
     }
 }
