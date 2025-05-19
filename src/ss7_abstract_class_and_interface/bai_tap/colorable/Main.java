@@ -16,13 +16,7 @@ public class Main {
         };
         for (Shape shape: shapes) {
             System.out.print(shape.getClass().getSimpleName() + ": Area is ");
-            if (shape instanceof Circle) {
-                System.out.println(((Circle) shape).getArea());
-            } else if (shape instanceof Square) {
-                System.out.println(((Square) shape).getArea());
-            } else if (shape instanceof Rectangle) {
-                System.out.println(((Rectangle) shape).getArea());
-            }
+            System.out.println(shape.getArea());
             if (shape instanceof Colorable) {
                 ((Colorable) shape).howToColor();
             }

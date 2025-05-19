@@ -24,10 +24,12 @@ public class Circle extends Shape implements Resizable {
         this.radius = radius;
     }
 
+    @Override
     public double getArea() {
         return radius * radius * Math.PI;
     }
 
+    @Override
     public double getPerimeter() {
         return 2 * radius * Math.PI;
     }

@@ -35,10 +35,12 @@ public class Rectangle extends Shape implements Resizable {
         this.length = length;
     }
 
+    @Override
     public double getArea() {
         return width * this.length;
     }
 
+    @Override
     public double getPerimeter() {
         return 2 * (width + this.length);
     }

@@ -4,7 +4,6 @@ import ss6_inherit.thuc_hanh.shape.Circle;
 import ss6_inherit.thuc_hanh.shape.Rectangle;
 import ss6_inherit.thuc_hanh.shape.Shape;
 import ss6_inherit.thuc_hanh.shape.Square;
-import ss7_abstract_class_and_interface.bai_tap.colorable.Colorable;
 
 import java.util.Random;
 
@@ -39,13 +38,7 @@ public class Main {
     public static void printArea(Shape[] shapes) {
         for (Shape shape: shapes) {
             System.out.print(shape.getClass().getSimpleName() + ": Area is ");
-            if (shape instanceof Square) {
-                System.out.println(((Square) shape).getArea());
-            } else if (shape instanceof Rectangle) {
-                System.out.println(((Rectangle) shape).getArea());
-            } else if (shape instanceof Circle) {
-                System.out.println(((Circle) shape).getArea());
-            }
+            System.out.println(shape.getArea());
         }
     }
 }

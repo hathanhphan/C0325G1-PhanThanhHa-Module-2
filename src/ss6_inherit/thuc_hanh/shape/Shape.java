@@ -1,6 +1,6 @@
 package ss6_inherit.thuc_hanh.shape;
 
-public class Shape {
+public abstract class Shape {
     private String color = "green";
     private boolean filled = true;
 
@@ -26,6 +26,10 @@ public class Shape {
     public void setFilled(boolean filled) {
         this.filled = filled;
     }
+
+    public abstract double getArea();
+
+    public abstract double getPerimeter();
 
     @Override
     public String toString() {
