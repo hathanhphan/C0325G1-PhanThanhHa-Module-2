@@ -1,4 +1,4 @@
-package ss11_dsa.bai_tap.queue_use_circular_linked_list;
+package ss11_dsa.bai_tap.queue_using_circular_linked_list;
 
 public class CircularQueueClient {
     public static void main(String[] args) {
