@@ -10,6 +10,16 @@ public class FizzBuzzTranslate {
             return "Fizz";
         if(isBuzz)
             return "Buzz";
-        return number + "";
+        return translateNumberNotFizzBuzz(number);
+    }
+
+    private static String translateNumberNotFizzBuzz(int number) {
+        String[] strNumber = {"khong", "mot", "hai", "ba", "bon", "nam", "sau", "bay", "tam", "chin"};
+        String result = strNumber[number % 10];
+        number /= 10;
+        if (number > 0 && number <= 9) {
+            result = strNumber[number] + " " + result;
+        }
+        return result;
     }
 }

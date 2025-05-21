@@ -3,6 +3,8 @@ package ss10_dsa.bai_tap.my_list;
 import ss6_inherit.thuc_hanh.shape.Shape;
 import ss6_inherit.thuc_hanh.shape.Square;
 
+import java.util.ArrayList;
+
 public class MyListTest {
     public static void main(String[] args) {
         MyList<Integer> myList = new MyList<>();
@@ -49,11 +51,10 @@ public class MyListTest {
         if (myList.contains(450)) {
             System.out.println("Danh sách có chưa phần tử " + otherNumberNeedFind);
         } else {
-            System.out.println("Không tìm thấy phần tử " + otherNumberNeedFind + "trong danh sách");
+            System.out.println("Không tìm thấy phần tử " + otherNumberNeedFind + " trong danh sách");
         }
 
         myList.clear();
         System.out.println("\nĐộ dài danh sách sau khi clear là " + myList.size());
-
     }
 }

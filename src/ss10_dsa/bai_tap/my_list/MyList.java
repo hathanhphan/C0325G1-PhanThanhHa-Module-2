@@ -28,12 +28,11 @@ public class MyList<E> {
         if (size == elements.length) {
             ensureCapacity(DEFAULT_CAPACITY);
         }
-        if (index >= 0 && index <= elements.length) {
-            Object[] newElements = new Object[elements.length + 1];
-            System.arraycopy(elements, 0, newElements, 0, index);
-            newElements[index] = element;
-            System.arraycopy(elements, index, newElements, index + 1, elements.length - index);
-            elements = newElements;
+        if (index >= 0 && index <= size) {
+            for (int i = size; i > index; i--) {
+                elements[i] = elements[i - 1];
+            }
+            elements[index] = element;
             size++;
         } else {
             throw new IndexOutOfBoundsException("index " + index);
@@ -60,12 +59,7 @@ public class MyList<E> {
     }
 
     public boolean contains (E o) {
-        for (int i = 0; i < size; i++) {
-            if (elements[i].equals(o)) {
-                return true;
-            }
-        }
-        return false;
+        return indexOf(o) >= 0;
     }
 
     public int indexOf(E o) {
@@ -96,7 +90,9 @@ public class MyList<E> {
     }
 
     public void clear() {
-        elements = new Object[DEFAULT_CAPACITY];
+        for (int i = 0; i < size; i++) {
+            elements[i] = null;
+        }
         size = 0;
     }
 }

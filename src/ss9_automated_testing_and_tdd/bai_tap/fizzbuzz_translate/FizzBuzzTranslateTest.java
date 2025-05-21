@@ -62,7 +62,16 @@ public class FizzBuzzTranslateTest {
     @Test
     void testFizzBuzz14() {
         int number = 14;
-        String expected = "14";
+        String expected = "mot bon";
+
+        String result = FizzBuzzTranslate.translate(number);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void testFizzBuzz7() {
+        int number = 7;
+        String expected = "bay";
 
         String result = FizzBuzzTranslate.translate(number);
         assertEquals(expected, result);
