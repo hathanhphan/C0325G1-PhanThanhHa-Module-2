@@ -1,23 +1,22 @@
 package ss12_java_collection_framework.bai_tap.product_management;
 
 import java.util.ArrayList;
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ProductManagerArrayList {
-    private ArrayList<Product> productsList;
+public class ProductManager {
+    private List<Product> productsList;
 
-    public ProductManagerArrayList() {
+    public ProductManager() {
         this.productsList = new ArrayList<>();
-        initializeSampleProducts();
+        // Chỉ cần đổi ArrayList sang LinkedList, các method triển khai bên dưới không cần sửa đổi gì
+        //this.productsList = new LinkedList<>();
+        initializeSample();
     }
 
-    private void initializeSampleProducts() {
+    private void initializeSample() {
         productsList.add(new Product(1, "Laptop Dell XPS 13", 1299.99));
         productsList.add(new Product(2, "iPhone 13 Pro", 999.99));
         productsList.add(new Product(3, "Samsung TV", 799.50));
@@ -109,7 +108,6 @@ public class ProductManagerArrayList {
                     if (!caseSensitive) {
                         productName = productName.toLowerCase();
                     }
-
                     if (exactMatch) {
                         return productName.equals(finalKeyword);
                     } else {
@@ -121,13 +119,11 @@ public class ProductManagerArrayList {
 
     public List<Product> sortByPrice(boolean ascending) {
         List<Product> sortedList = new ArrayList<>(productsList);
-
         if (ascending) {
             sortedList.sort(Comparator.comparing(Product::getPrice));
         } else {
             sortedList.sort(Comparator.comparing(Product::getPrice).reversed());
         }
-
         return sortedList;
     }
 
