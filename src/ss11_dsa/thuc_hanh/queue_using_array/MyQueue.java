@@ -35,11 +35,8 @@ public class MyQueue {
         if (isQueueEmpty()) {
             System.out.println("Underflow! Unable to remove element from Queue");
         } else {
-            head++;
-            System.out.println("Pop operation done! Removed: " + queueArr[head - 1]);
-            if (head == capacity - 1) {
-                head = 0;
-            }
+            System.out.println("Pop operation done! Removed: " + queueArr[head]);
+            head = (head + 1) % capacity;
             currentSize--;
         }
     }

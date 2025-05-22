@@ -8,8 +8,7 @@ public class BST<E extends Comparable<E>> extends AbstractTree<E> {
     }
 
     public BST(E[] objects) {
-        for (int i = 0; i < objects.length; i++)
-            insert(objects[i]);
+        for (E object : objects) insert(object);
     }
 
     @Override
