@@ -10,9 +10,7 @@ public class AlgorithmComplexityTest {
         String inputString = scanner.nextLine();
         int[] frequentChar = new int[255];                          //{1}
         for (int i = 0; i < inputString.length(); i++) {            //{2}
-            /* Tìm ví trí tương ứng của ký tự trong bảng ASCII */
             int ascii = inputString.charAt(i);                      //{3}
-            /* Tăng giá trị tần suất */
             frequentChar[ascii] += 1;                               //{4}
         }
         int max = 0;                                                //{5}
@@ -24,5 +22,13 @@ public class AlgorithmComplexityTest {
             }
         }
         System.out.println("The most appearing letter is '" + character + "' with a frequency of " + max + " times");
+        /*
+        * {1} {3} {4} {5} {6} {8} {9} {10} mỗi lệnh đều tốn O(1) thời gian
+        * {2} Vòng lặp n lần sẽ tốn n thời gian
+        * {7} Vòng lặp 255 lần sẽ tốn 255 thời gian
+        * Sẽ có 2 trường hợp:
+        * - TH1: n <= 255 => Độ phức tạp của thuật toán = thời gian của {7} = O(255)
+        * - TH2: n > 255 => Độ phức tạp của thuật toán = thời gian của {2} = O(n)
+        * */
     }
 }

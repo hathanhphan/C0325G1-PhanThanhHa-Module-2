@@ -17,7 +17,7 @@ public class Main {
         }
 
         // Sửa sản phẩm
-        if (productManagerArrayList.update(8, new Product(8, "Backpack White", 88.99))) {
+        if (productManagerArrayList.update(new Product(8, "Backpack White", 88.99))) {
             System.out.println("\nSửa thành công!");
         } else {
             System.out.println("\nKhông tìm thấy sản phẩm cần sửa!");

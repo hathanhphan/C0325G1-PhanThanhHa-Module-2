@@ -38,10 +38,9 @@ public class ProductManager {
         return productsList.add(product);
     }
 
-    public boolean update(long id, Product product) {
+    public boolean update(Product product) {
         for (int i = 0; i < productsList.size(); i++) {
-            if (productsList.get(i).getId() == id) {
-                product.setId(id);
+            if (productsList.get(i).getId() == product.getId()) {
                 productsList.set(i, product);
                 return true;
             }
