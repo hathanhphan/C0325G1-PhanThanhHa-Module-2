@@ -131,7 +131,7 @@ public class Validation {
 
     /**
      * Checks if the input string is a valid phone number.
-     * This method uses a basic pattern for phone numbers.
+     * This method uses a basic pattern for phone numbers.txt.
      *
      * @param str The string to check
      * @return true if the string is a valid phone number, false otherwise
