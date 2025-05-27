@@ -7,7 +7,7 @@ public class InputValidator {
     private static final Scanner scanner = new Scanner(System.in);
 
     // Validate số nguyên dương, độ dài tối đa (cho phép null)
-    public static Long inputPositiveLong(String prompt, String fieldName, int maxLength, boolean allowEmpty) {
+    public static Long inputPositiveLong(String prompt, String displayName, int maxLength, boolean allowEmpty) {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine();
@@ -16,26 +16,26 @@ public class InputValidator {
             }
             if (input.length() > maxLength) {
                 ConsoleColorUtil.printlnRed(
-                        String.format("Độ dài tối đa của %s là %d ký tự.", fieldName, maxLength));
+                        String.format("Độ dài tối đa của %s là %d ký tự.", displayName, maxLength));
                 continue;
             }
             try {
                 long value = Long.parseLong(input);
                 if (value < 0) {
                     ConsoleColorUtil.printlnRed(
-                            String.format("%s phải là số dương!", capitalize(fieldName)));
+                            String.format("%s phải là số dương!", capitalize(displayName)));
                     continue;
                 }
                 return value;
             } catch (NumberFormatException e) {
                 ConsoleColorUtil.printlnRed(
-                        String.format("%s phải là số!", capitalize(fieldName)));
+                        String.format("%s phải là số!", capitalize(displayName)));
             }
         }
     }
 
     // Validate chuỗi theo min/max, cho phép null
-    public static String inputString(String prompt, String fieldName, int minLength, int maxLength, boolean allowEmpty) {
+    public static String inputString(String prompt, String displayName, int minLength, int maxLength, boolean allowEmpty) {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine();
@@ -44,7 +44,7 @@ public class InputValidator {
             }
             if (input.length() < minLength || input.length() > maxLength) {
                 ConsoleColorUtil.printlnRed(
-                        String.format("Độ dài của %s phải từ %d đến %d ký tự.", fieldName, minLength, maxLength));
+                        String.format("Độ dài của %s phải từ %d đến %d ký tự.", displayName, minLength, maxLength));
                 continue;
             }
             return input;
@@ -52,7 +52,7 @@ public class InputValidator {
     }
 
     // Validate số thực theo min/max, cho phép null
-    public static Float inputFloat(String prompt, String fieldName, float min, float max, boolean allowEmpty) {
+    public static Float inputFloat(String prompt, String displayName, float min, float max, boolean allowEmpty) {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine();
@@ -63,20 +63,19 @@ public class InputValidator {
                 float value = Float.parseFloat(input);
                 if (value < min || value > max) {
                     ConsoleColorUtil.printlnRed(
-                            String.format("Giá trị của %s phải từ %.2f đến %.2f.", fieldName, min, max));
+                            String.format("Giá trị của %s phải từ %.2f đến %.2f.", displayName, min, max));
                     continue;
                 }
                 return value;
             } catch (NumberFormatException e) {
                 ConsoleColorUtil.printlnRed(
-                        String.format("%s phải là số thực!", capitalize(fieldName)));
+                        String.format("%s phải là số thực!", capitalize(displayName)));
             }
         }
     }
 
     // Validate theo regex, cho phép null
-    public static String inputPattern(
-            String prompt, String fieldName, String pattern, String errorMsg, boolean allowEmpty) {
+    public static String inputPattern(String prompt, String displayName, String pattern, String errorMsg, boolean allowEmpty) {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine();
@@ -85,7 +84,7 @@ public class InputValidator {
             }
             if (!Pattern.matches(pattern, input)) {
                 ConsoleColorUtil.printlnRed(
-                        String.format("%s: %s", capitalize(fieldName), errorMsg));
+                        String.format("%s: %s", capitalize(displayName), errorMsg));
                 continue;
             }
             return input;
@@ -93,15 +92,15 @@ public class InputValidator {
     }
 
     // Validate email, cho phép null
-    public static String inputEmail(String prompt, String fieldName, boolean allowEmpty) {
+    public static String inputEmail(String prompt, String displayName, boolean allowEmpty) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-        return inputPattern(prompt, fieldName, emailRegex, "Email không hợp lệ!", allowEmpty);
+        return inputPattern(prompt, displayName, emailRegex, "Email không hợp lệ!", allowEmpty);
     }
 
     // Validate số điện thoại (Việt Nam), cho phép null
-    public static String inputPhone(String prompt, String fieldName, boolean allowEmpty) {
+    public static String inputPhone(String prompt, String displayName, boolean allowEmpty) {
         String phoneRegex = "0[0-9]{9,10}";
-        return inputPattern(prompt, fieldName, phoneRegex, "Số điện thoại không hợp lệ!", allowEmpty);
+        return inputPattern(prompt, displayName, phoneRegex, "Số điện thoại không hợp lệ!", allowEmpty);
     }
 
     // Viết hoa chữ cái đầu

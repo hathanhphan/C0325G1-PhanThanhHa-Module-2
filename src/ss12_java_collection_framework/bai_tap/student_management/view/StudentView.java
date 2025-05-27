@@ -4,7 +4,6 @@ import ss12_java_collection_framework.bai_tap.student_management.entity.Student;
 import ss12_java_collection_framework.bai_tap.student_management.util.ConsoleColorUtil;
 import ss12_java_collection_framework.bai_tap.student_management.util.InputValidator;
 
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 

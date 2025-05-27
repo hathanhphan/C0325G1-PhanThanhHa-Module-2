@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class StudentController {
-    private final IStudentService studentService = new StudentService();
-    private final Scanner scanner = new Scanner(System.in);
+    private final static IStudentService studentService = new StudentService();
+    private final static Scanner scanner = new Scanner(System.in);
 
     public void displayMenu() {
-        while (true){
+        while (true) {
             System.out.println("""
                     Quản lý học viên:
                     1. Danh sách học viên
@@ -35,85 +35,114 @@ public class StudentController {
             }
             ViewSelector selector;
             selector = ViewSelector.fromValue(choice);
-            Student student;
-            Long studentId;
-            switch (selector){
+            switch (selector) {
                 case DISPLAY:
-                    List<Student> studentList = studentService.findAll();
-                    if (!studentList.isEmpty()) {
-                        StudentView.display(studentList);
-                    } else {
-                        ConsoleColorUtil.printlnYellow("Danh sách học viên trống!");
-                    }
+                    displayStudentList();
                     break;
                 case ADD:
-                    student = StudentView.inputNewStudent();
-                    if (studentService.add(student)) {
-                        ConsoleColorUtil.printlnGreen("Thêm mới thành công học viên " + student.getName() + " (" + student.getId() + ")");
-                    } else {
-                        boolean isReInputStudentId = true;
-                        while (isReInputStudentId) {
-                            ConsoleColorUtil.printlnRed("Thêm mới không thành công. Mã học viên đã tồn tại!");
-                            isReInputStudentId = StudentView.selectReInputStudentId();
-                            if (isReInputStudentId) {
-                                studentId = StudentView.inputStudentId("Nhập lại mã học viên: ");
-                                student.setId(studentId);
-                                if (studentService.add(student)) {
-                                    ConsoleColorUtil.printlnGreen("Thêm mới thành công học viên " + student.getName() + " (" + student.getId() + ")");
-                                    isReInputStudentId = false;
-                                }
-                            }
-                        }
-
-                    }
+                    addNewStudent();
                     break;
                 case UPDATE:
-                    studentId = StudentView.inputStudentId("Nhập mã học viên cần cập nhật: ");
-                    if ((student = studentService.findById(studentId)) != null) {
-                        student = StudentView.inputUpdateStudent(studentId, student);
-                        if (studentService.update(student)) {
-                            ConsoleColorUtil.printlnGreen("Cập nhật thành công học viên " + student.getName() + " (" + studentId + ")");
-                        } else {
-                            ConsoleColorUtil.printlnRed("Không tìm thấy học viên có mã là " + studentId);
-                        }
-                    } else {
-                        ConsoleColorUtil.printlnRed("Không tìm thấy học viên có mã là " + studentId);
-                    }
+                    updateStudent();
                     break;
                 case DELETE:
-                    studentId = StudentView.inputStudentId("Nhập mã học viên cần xoá: ");
-                    if ((student = studentService.findById(studentId)) != null) {
-                        if (studentService.delete(studentId)) {
-                            ConsoleColorUtil.printlnGreen("Xoá thành công học viên " + student.getName() + " (" + studentId + ")");
-                        } else {
-                            ConsoleColorUtil.printlnRed("Không tìm thấy học viên có mã là " + studentId);
-                        }
-                    } else {
-                        ConsoleColorUtil.printlnRed("Không tìm thấy học viên có mã là " + studentId);
-                    }
+                    deleteStudent();
                     break;
                 case SEARCH:
-                    String studentNameKeyword = StudentView.inputStudentName();
-                    List<Student> foundStudentList = studentService.searchByName(studentNameKeyword, false, false);
-                    if (!foundStudentList.isEmpty()) {
-                        StudentView.display(foundStudentList, "\n=========== DANH SÁCH HỌC VIÊN TÊN CÓ CHỨA '" + studentNameKeyword + "' ===========");
-                    } else {
-                        ConsoleColorUtil.printlnYellow("Không tìm thấy học viên nào mà tên có chứa '" + studentNameKeyword + "'");
-                    }
+                    searchStudent();
                     break;
                 case SORT:
-                    boolean isAscending = StudentView.selectSortType();
-                    List<Student> sortedStudentList = studentService.sortByName(isAscending);
-                    if (!sortedStudentList.isEmpty()) {
-                        StudentView.display(sortedStudentList, "\n=========== DANH SÁCH HỌC VIÊN TÊN SẮP XẾP " + (isAscending ? "TĂNG" : "GIẢM") + " DẦN THEO TÊN ===========");
-                    } else {
-                        ConsoleColorUtil.printlnYellow("Danh sách học viên trống!");
-                    }
+                    sortStudentList();
                     break;
                 default:
                     ConsoleColorUtil.printlnYellow("Kết thúc chương trình...");
                     return;
             }
+        }
+    }
+
+    public static void displayStudentList() {
+        List<Student> studentList = studentService.findAll();
+        if (!studentList.isEmpty()) {
+            StudentView.display(studentList);
+        } else {
+            ConsoleColorUtil.printlnYellow("Danh sách học viên trống!");
+        }
+    }
+
+    public static void addNewStudent() {
+        Long studentId;
+        Student student;
+        student = StudentView.inputNewStudent();
+        if (studentService.add(student)) {
+            ConsoleColorUtil.printlnGreen("Thêm mới thành công học viên " + student.getName() + " (" + student.getId() + ")");
+        } else {
+            boolean isReInputStudentId = true;
+            while (isReInputStudentId) {
+                ConsoleColorUtil.printlnRed("Thêm mới không thành công. Mã học viên đã tồn tại!");
+                isReInputStudentId = StudentView.selectReInputStudentId();
+                if (isReInputStudentId) {
+                    studentId = StudentView.inputStudentId("Nhập lại mã học viên: ");
+                    student.setId(studentId);
+                    if (studentService.add(student)) {
+                        ConsoleColorUtil.printlnGreen("Thêm mới thành công học viên " + student.getName() + " (" + student.getId() + ")");
+                        isReInputStudentId = false;
+                    }
+                }
+            }
+
+        }
+    }
+
+    public static void updateStudent() {
+        Long studentId;
+        Student student;
+        studentId = StudentView.inputStudentId("Nhập mã học viên cần cập nhật: ");
+        if ((student = studentService.findById(studentId)) != null) {
+            ConsoleColorUtil.printlnGreen("Tìm thấy học viên " + student.getName() + " (" + studentId + ")");
+            student = StudentView.inputUpdateStudent(studentId, student);
+            if (studentService.update(student)) {
+                ConsoleColorUtil.printlnGreen("Cập nhật thành công học viên " + student.getName() + " (" + studentId + ")");
+            } else {
+                ConsoleColorUtil.printlnRed("Không tìm thấy học viên có mã là " + studentId);
+            }
+        } else {
+            ConsoleColorUtil.printlnRed("Không tìm thấy học viên có mã là " + studentId);
+        }
+    }
+
+    public static void deleteStudent() {
+        Student student;
+        Long studentId;
+        studentId = StudentView.inputStudentId("Nhập mã học viên cần xoá: ");
+        if ((student = studentService.findById(studentId)) != null) {
+            if (studentService.delete(studentId)) {
+                ConsoleColorUtil.printlnGreen("Xoá thành công học viên " + student.getName() + " (" + studentId + ")");
+            } else {
+                ConsoleColorUtil.printlnRed("Không tìm thấy học viên có mã là " + studentId);
+            }
+        } else {
+            ConsoleColorUtil.printlnRed("Không tìm thấy học viên có mã là " + studentId);
+        }
+    }
+
+    public static void searchStudent() {
+        String studentNameKeyword = StudentView.inputStudentName();
+        List<Student> foundStudentList = studentService.searchByName(studentNameKeyword, false, false);
+        if (!foundStudentList.isEmpty()) {
+            StudentView.display(foundStudentList, "\n=========== DANH SÁCH HỌC VIÊN TÊN CÓ CHỨA '" + studentNameKeyword + "' ===========");
+        } else {
+            ConsoleColorUtil.printlnYellow("Không tìm thấy học viên nào mà tên có chứa '" + studentNameKeyword + "'");
+        }
+    }
+
+    public static void sortStudentList() {
+        boolean isAscending = StudentView.selectSortType();
+        List<Student> sortedStudentList = studentService.sortByName(isAscending);
+        if (!sortedStudentList.isEmpty()) {
+            StudentView.display(sortedStudentList, "\n=========== DANH SÁCH HỌC VIÊN TÊN SẮP XẾP " + (isAscending ? "TĂNG" : "GIẢM") + " DẦN THEO TÊN ===========");
+        } else {
+            ConsoleColorUtil.printlnYellow("Danh sách học viên trống!");
         }
     }
 }
