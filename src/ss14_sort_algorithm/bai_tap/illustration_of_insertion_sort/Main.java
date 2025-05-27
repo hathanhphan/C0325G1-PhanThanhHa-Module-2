@@ -7,11 +7,11 @@ import static ss14_sort_algorithm.bai_tap.illustration_of_insertion_sort.Inserti
 public class Main {
     public static void main(String[] args) {
         int[] arr = ArrayIO.inputInt(3, 50);
-        System.out.println("Initial array: ");
+        System.out.println("Mảng ban đầu: ");
         for (int j : arr) System.out.print(j + "\t");
         System.out.println();
         insertionSortByStep(arr);
-        System.out.println("\nSorted array: ");
+        System.out.println("\nMảng đã sắp xếp: ");
         for (int j : arr) System.out.print(j + "\t");
     }
 }

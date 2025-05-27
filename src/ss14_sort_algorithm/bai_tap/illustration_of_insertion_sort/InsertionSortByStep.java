@@ -10,21 +10,21 @@ public class InsertionSortByStep {
             currentElement = list[i];
             position = i;
             hasMoved = false;
-            System.out.printf("\nCurrent element is %d", currentElement);
+            System.out.printf("\nPhần tử hiện tại là %d", currentElement);
             while (position > 0 && currentElement < list[position - 1]) {
-                System.out.printf("\n%d is less than %d. Move %d to the right", currentElement, list[position - 1], list[position - 1]);
+                System.out.printf("\n%d nhỏ hơn %d. Di chuyển %d sang phải", currentElement, list[position - 1], list[position - 1]);
                 list[position] = list[position - 1];
                 position--;
                 hasMoved = true;
             }
             list[position] = currentElement;
             if (hasMoved) {
-                System.out.printf("\nInsert %d into position %d", currentElement, position);
+                System.out.printf("\nChèn %d vào vị trí %d", currentElement, position);
             } else {
-                System.out.printf("\nNo have any pre-elements is greater than %d", currentElement);
+                System.out.printf("\nKhông có phần tử nào ở phía trước lớn hơn %d", currentElement);
             }
 
-            System.out.println("\nList after the " + i + "' sort: ");
+            System.out.println("\nMảng sau khi thực hiện sắp xếp lần " + i + ": ");
             for (int item : list) {
                 System.out.print(item + "\t");
             }
