@@ -41,7 +41,7 @@ public class Student implements Comparable<Student> {
 
     @Override
     public String toString() {
-        return "Product{" +
+        return "Student{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
                 ", address='" + address + '\'' +
