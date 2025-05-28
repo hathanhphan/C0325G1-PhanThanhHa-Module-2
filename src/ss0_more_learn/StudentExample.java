@@ -23,7 +23,7 @@ class Student {
 
     @Override
     public String toString() {
-        return "Student{name='" + name + "', age=" + age + ", gender='" + gender + "', gpa=" + gpa + "}";
+        return "Product{name='" + name + "', age=" + age + ", gender='" + gender + "', gpa=" + gpa + "}";
     }
 }
 
@@ -65,7 +65,7 @@ public class StudentExample {
                         Student::getAge,
                         Collectors.counting()
                 ));
-        System.out.println("Student count by age: " + studentCountByAge);
+        System.out.println("Product count by age: " + studentCountByAge);
 
         // 5. Tìm học sinh trẻ nhất ở mỗi giới tính
         Map<String, Optional<Student>> youngestByGender = Arrays.stream(students)

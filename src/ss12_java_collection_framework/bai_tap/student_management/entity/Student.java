@@ -31,7 +31,7 @@ public class Student extends Person {
 
     @Override
     public String toString() {
-        return "Student{" +
+        return "Product{" +
                  super.toString()+
                 ", point=" + point +
                 ", className='" + className + '\'' +
