@@ -97,6 +97,7 @@ public class StudentView {
     }
 
     public static boolean selectSortType() {
+        int choice;
         while (true) {
             try {
                 System.out.println("""
@@ -104,9 +105,10 @@ public class StudentView {
                         \t1. Tăng dần theo tên
                         \t2. Giảm dần theo tên""");
                 System.out.print("Chọn chức năng: ");
-                int choice = Integer.parseInt(scanner.nextLine());
+                choice = Integer.parseInt(scanner.nextLine());
                 if (choice == 1) return true;
-                if (choice == 2) return false;
+                else if (choice == 2) return false;
+                else ConsoleColorUtil.printlnRed("Bạn chọn chức năng không hợp lệ. Vui lòng chọn lại.");
             } catch (NumberFormatException e) {
                 ConsoleColorUtil.printlnRed("Bạn chọn chức năng không hợp lệ. Vui lòng chọn lại.");
             }
@@ -114,6 +116,7 @@ public class StudentView {
     }
 
     public static boolean selectReInputStudentId() {
+        int choice;
         while (true) {
             try {
                 System.out.println("""
@@ -121,9 +124,10 @@ public class StudentView {
                         \t1. Nhập lại mã học viên
                         \t2. Kết thúc chức năng thêm mới""");
                 System.out.print("Chọn chức năng: ");
-                int choice = Integer.parseInt(scanner.nextLine());
+                choice = Integer.parseInt(scanner.nextLine());
                 if (choice == 1) return true;
-                if (choice == 2) return false;
+                else if (choice == 2) return false;
+                else ConsoleColorUtil.printlnRed("Bạn chọn chức năng không hợp lệ. Vui lòng chọn lại.");
             } catch (NumberFormatException e) {
                 ConsoleColorUtil.printlnRed("Bạn chọn chức năng không hợp lệ. Vui lòng chọn lại.");
             }

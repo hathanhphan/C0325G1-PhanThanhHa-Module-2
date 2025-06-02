@@ -12,15 +12,16 @@ import java.util.stream.Collectors;
 
 public class ProductRepository implements IProductRepository {
     private static final String path = "D:\\CodeGym\\module2\\src\\ss17_io_binary_file_serialization\\bai_tap\\product_management\\data\\product.dat";
-    private static final List<Product> products = IOBinaryFile.readFromFile(path);
+    private static List<Product> products;
 
     @Override
     public List<Product> findAll() {
-        return products;
+        return IOBinaryFile.readFromFile(path);
     }
 
     @Override
     public Product findById(Long id) {
+        products = findAll();
         for (Product p : products) {
             if (Objects.equals(p.getId(), id)) {
                 return p;
@@ -31,6 +32,7 @@ public class ProductRepository implements IProductRepository {
 
     @Override
     public boolean add(Product product) {
+        products = findAll();
         for (Product p : products) {
             if (Objects.equals(p.getId(), product.getId())) {
                 return false;
@@ -43,6 +45,7 @@ public class ProductRepository implements IProductRepository {
 
     @Override
     public boolean update(Product product) {
+        products = findAll();
         for (int i = 0; i < products.size(); i++) {
             if (Objects.equals(products.get(i).getId(), product.getId())) {
                 products.set(i, product);
@@ -56,6 +59,7 @@ public class ProductRepository implements IProductRepository {
 
     @Override
     public boolean delete(Long id) {
+        products = findAll();
         for (int i = 0; i < products.size(); i++) {
             if (Objects.equals(products.get(i).getId(), id)) {
                 products.remove(i);
@@ -77,6 +81,7 @@ public class ProductRepository implements IProductRepository {
             searchKeyword = searchKeyword.toLowerCase();
         }
         final String finalKeyword = searchKeyword;
+        products = findAll();
         return products.stream()
                 .filter(student -> {
                     String studentName = student.getName();
@@ -94,6 +99,7 @@ public class ProductRepository implements IProductRepository {
 
     @Override
     public List<Product> sortByPrice(boolean ascending) {
+        products = findAll();
         List<Product> sortedList = new ArrayList<>(products);
         if (ascending) {
             sortedList.sort(Comparator.comparing(Product::getPrice).thenComparing(Product::getId));

@@ -1,18 +1,16 @@
 package ss12_java_collection_framework.bai_tap.student_management.controller;
 
-import ss12_java_collection_framework.bai_tap.student_management.common.ViewSelector;
 import ss12_java_collection_framework.bai_tap.student_management.entity.Student;
 import ss12_java_collection_framework.bai_tap.student_management.service.IStudentService;
 import ss12_java_collection_framework.bai_tap.student_management.service.StudentService;
 import ss12_java_collection_framework.bai_tap.student_management.util.ConsoleColorUtil;
+import ss12_java_collection_framework.bai_tap.student_management.view.CommonView;
 import ss12_java_collection_framework.bai_tap.student_management.view.StudentView;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class StudentController {
     private final static IStudentService studentService = new StudentService();
-    private final static Scanner scanner = new Scanner(System.in);
 
     public void displayMenu() {
         while (true) {
@@ -25,17 +23,7 @@ public class StudentController {
                     5. Tìm kiếm học viên
                     6. Sắp xếp học viên
                     7. Thoát""");
-            System.out.print("Chọn chức năng: ");
-            int choice;
-            try {
-                choice = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                ConsoleColorUtil.printlnYellow("Bạn nhập chức năng không đúng định dạng. Kết thúc chương trình...");
-                return;
-            }
-            ViewSelector selector;
-            selector = ViewSelector.fromValue(choice);
-            switch (selector) {
+            switch (CommonView.inputFeatureSelection()) {
                 case DISPLAY:
                     displayStudentList();
                     break;
@@ -54,9 +42,11 @@ public class StudentController {
                 case SORT:
                     sortStudentList();
                     break;
-                default:
+                case EXIT:
                     ConsoleColorUtil.printlnYellow("Kết thúc chương trình...");
                     return;
+                default:
+                    ConsoleColorUtil.printlnYellow("Không có chức năng tương ứng. Vui lòng chọn lại.");
             }
         }
     }
