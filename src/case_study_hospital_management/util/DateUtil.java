@@ -1,6 +1,6 @@
 package case_study_hospital_management.util;
 
-import case_study_hospital_management.common.constants.Constants;
+import case_study_hospital_management.common.constants.ConfigurationConstants;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -10,16 +10,16 @@ import java.time.format.DateTimeParseException;
 
 public class DateUtil {
     public static String formatDate(LocalDate date) {
-        return date != null ? date.format(Constants.DATE_FORMATTER) : "";
+        return date != null ? date.format(ConfigurationConstants.DATE_FORMATTER) : "";
     }
 
     public static String formatTime(LocalTime time) {
-        return time != null ? time.format(Constants.TIME_FORMATTER) : "";
+        return time != null ? time.format(ConfigurationConstants.TIME_FORMATTER) : "";
     }
 
     public static LocalDate parseDate(String dateString) {
         try {
-            return LocalDate.parse(dateString, Constants.DATE_FORMATTER);
+            return LocalDate.parse(dateString, ConfigurationConstants.DATE_FORMATTER);
         } catch (DateTimeParseException e) {
             System.err.println("Invalid date format: " + dateString);
             return null;
@@ -28,7 +28,7 @@ public class DateUtil {
 
     public static LocalTime parseTime(String timeString) {
         try {
-            return LocalTime.parse(timeString, Constants.TIME_FORMATTER);
+            return LocalTime.parse(timeString, ConfigurationConstants.TIME_FORMATTER);
         } catch (DateTimeParseException e) {
             System.err.println("Invalid time format: " + timeString);
             return null;

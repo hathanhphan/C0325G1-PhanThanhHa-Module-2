@@ -1,6 +1,6 @@
 package case_study_hospital_management.util;
 
-import case_study_hospital_management.common.constants.Constants;
+import case_study_hospital_management.common.constants.ConfigurationConstants;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ public class CSVUtil{
 
     public static List<String> readCSVFile(String fileName) {
         List<String> lines = new ArrayList<>();
-        String filePath = Constants.DATA_FOLDER + fileName;
+        String filePath = ConfigurationConstants.DATA_FOLDER + fileName;
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -25,8 +25,8 @@ public class CSVUtil{
     }
 
     public static <T> boolean writeCSVFile(String fileName, List<T> objects) {
-        String filePath = Constants.DATA_FOLDER + fileName;
-        File dataDir = new File(Constants.DATA_FOLDER);
+        String filePath = ConfigurationConstants.DATA_FOLDER + fileName;
+        File dataDir = new File(ConfigurationConstants.DATA_FOLDER);
         if(!dataDir.exists()) {
             dataDir.mkdir();
         }

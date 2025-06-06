@@ -8,6 +8,7 @@ import case_study_hospital_management.service.PatientService;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PatientServiceImpl implements PatientService {
@@ -66,6 +67,21 @@ public class PatientServiceImpl implements PatientService {
     public String generateId() {
         List<PatientEntity> patients = patientRepository.findAll();
         int maxId = patients.stream().mapToInt(p -> Integer.parseInt(p.getId().substring(1))).max().orElse(0);
-        return String.format("P%03d", maxId + 1);
+        return String.format("P%06d", maxId + 1);
+    }
+
+    @Override
+    public Map<String, Integer> statisticByAge() {
+        return patientRepository.statisticByAge();
+    }
+
+    @Override
+    public Map<String, Integer> statisticByGender() {
+        return patientRepository.statisticByGender();
+    }
+
+    @Override
+    public Map<String, Integer> statisticByBloodType() {
+        return patientRepository.statisticByBloodType();
     }
 }

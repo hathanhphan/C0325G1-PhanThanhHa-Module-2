@@ -1,22 +1,25 @@
 package case_study_hospital_management.repository.impl;
 
-import case_study_hospital_management.common.constants.Constants;
+import case_study_hospital_management.common.constants.ConfigurationConstants;
 import case_study_hospital_management.common.enums.BloodType;
 import case_study_hospital_management.entity.PatientEntity;
 import case_study_hospital_management.repository.PatientRepository;
+import case_study_hospital_management.util.PersonHelper;
 import case_study_hospital_management.util.CSVUtil;
 import case_study_hospital_management.util.DateUtil;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PatientRepositoryImpl implements PatientRepository {
     private static PatientRepositoryImpl instance;
     private String fileName;
 
     private PatientRepositoryImpl() {
-        this.fileName = Constants.PATIENTS_FILE;
+        this.fileName = ConfigurationConstants.PATIENTS_FILE;
     }
 
     public static synchronized PatientRepositoryImpl getInstance() {
@@ -26,34 +29,18 @@ public class PatientRepositoryImpl implements PatientRepository {
         return instance;
     }
 
+    private List<PatientEntity> getCurrentList() {
+        return findAll().stream().filter(p -> !p.getDeleted()).toList();
+    }
+
     @Override
     public List<PatientEntity> findByName(String name) {
-        List<PatientEntity> patients = findAll();
-        if (patients.isEmpty()) {
-            return null;
-        }
-        List<PatientEntity> foundPatients = new ArrayList<>();
-        for (PatientEntity patient : patients) {
-            if (patient.getFullName().toLowerCase().contains(name.toLowerCase())) {
-                foundPatients.add(patient);
-            }
-        }
-        return foundPatients;
+        return getCurrentList().stream().filter(p -> p.getFullName().toLowerCase().contains(name.toLowerCase())).toList();
     }
 
     @Override
     public List<PatientEntity> findByPhoneNumber(String phoneNumber) {
-        List<PatientEntity> patients = findAll();
-        if (patients.isEmpty()) {
-            return null;
-        }
-        List<PatientEntity> foundPatients = new ArrayList<>();
-        for (PatientEntity patient : patients) {
-            if (patient.getPhoneNumber().contains(phoneNumber)) {
-                foundPatients.add(patient);
-            }
-        }
-        return foundPatients;
+        return getCurrentList().stream().filter(p -> p.getPhoneNumber().toLowerCase().contains(phoneNumber.toLowerCase())).toList();
     }
 
     @Override
@@ -82,7 +69,7 @@ public class PatientRepositoryImpl implements PatientRepository {
 
     @Override
     public int findIndexById(String id) {
-        List<PatientEntity> patients = findAll().stream().filter(p -> !p.getDeleted()).toList();
+        List<PatientEntity> patients = getCurrentList();
         for (int i = 0; i < patients.size(); i++) {
             if (patients.get(i).getId().equals(id)) {
                 return i;
@@ -93,7 +80,7 @@ public class PatientRepositoryImpl implements PatientRepository {
 
     @Override
     public PatientEntity findById(String id) {
-        List<PatientEntity> patients = findAll().stream().filter(p -> !p.getDeleted()).toList();
+        List<PatientEntity> patients = getCurrentList();
         for (PatientEntity patient : patients) {
             if (patient.getId().equals(id)) {
                 return patient;
@@ -131,5 +118,48 @@ public class PatientRepositoryImpl implements PatientRepository {
             return CSVUtil.writeCSVFile(fileName, patients);
         }
         return false;
+    }
+
+    @Override
+    public Map<String, Integer> statisticByAge() {
+        List<PatientEntity> patients = getCurrentList();
+        int currentYear = LocalDate.now().getYear();
+        return patients.stream()
+                .map(p -> {
+                    int age = currentYear - p.getDob().getYear();
+                    return PersonHelper.getAgeGroup(age);
+                })
+                .collect(Collectors.toMap(
+                        group -> group,
+                        group -> 1,
+                        Integer::sum
+                ));
+    }
+
+    @Override
+    public Map<String, Integer> statisticByGender() {
+        List<PatientEntity> patients = getCurrentList();
+        return patients.stream()
+                .map(p -> PersonHelper.getGenderDisplay(p.getGender()))
+                .collect(Collectors.toMap(
+                        group -> group,
+                        group -> 1,
+                        Integer::sum
+                ));
+    }
+
+    @Override
+    public Map<String, Integer> statisticByBloodType() {
+        List<PatientEntity> patients = getCurrentList();
+        return patients.stream()
+                .map(p -> {
+                    return p.getBloodType().getDisplayName();
+                })
+                .collect(Collectors.toMap(
+                        group -> group,
+                        group -> 1,
+                        Integer::sum
+                ));
+
     }
 }

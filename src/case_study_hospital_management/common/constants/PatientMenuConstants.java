@@ -1,6 +1,6 @@
 package case_study_hospital_management.common.constants;
 
-public class PatientMenuSelection {
+public class PatientMenuConstants {
     // Main menu
     public static final int REGISTER_PATIENT = 1;
     public static final int SEARCH_PATIENT = 2;
@@ -18,4 +18,9 @@ public class PatientMenuSelection {
     // Detail menu
     public static final int UPDATE_PATIENT_IN_DETAIL = 1;
     public static final int DELETE_PATIENT_IN_DETAIL = 2;
+
+    // Statistic menu
+    public static final int STATISTIC_PATIENT_BY_AGE_GROUP = 1;
+    public static final int STATISTIC_PATIENT_BY_GENDER = 2;
+    public static final int STATISTIC_PATIENT_BY_BLOOD_TYPE = 3;
 }

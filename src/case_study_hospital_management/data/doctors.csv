@@ -1,0 +1,31 @@
+D000001,Nguyễn Văn Cường,true,0903456789,Tim mạch,cuong.nguyen@benhvien.vn,BV001234,15,08:00-17:00,500000.0,false
+D000002,Trần Thị Dung,false,0914567890,Nhi khoa,dung.tran@benhvien.vn,BV001235,12,07:30-16:30,400000.0,false
+D000003,Lê Minh Đức,true,0925678901,Ngoại khoa,duc.le@benhvien.vn,BV001236,18,09:00-18:00,600000.0,false
+D000004,Phạm Thị Hạnh,false,0936789012,Sản phụ khoa,hanh.pham@benhvien.vn,BV001237,10,08:30-17:30,450000.0,false
+D000005,Võ Thanh Tùng,true,0947890123,Thần kinh,tung.vo@benhvien.vn,BV001238,20,08:00-16:00,700000.0,false
+D000006,Đặng Thị Kim,false,0958901234,Da liễu,kim.dang@benhvien.vn,BV001239,8,09:00-17:00,350000.0,false
+D000007,Bùi Văn Hùng,true,0969012345,Chấn thương chỉnh hình,hung.bui@benhvien.vn,BV001240,14,07:00-16:00,550000.0,false
+D000008,Hoàng Thị Lan,false,0970123456,Mắt,lan.hoang@benhvien.vn,BV001241,11,08:00-17:00,400000.0,false
+D000009,Trịnh Văn Minh,true,0981234567,Tai mũi họng,minh.trinh@benhvien.vn,BV001242,13,08:30-17:30,450000.0,false
+D000010,Ngô Thị Hoa,false,0992345678,Nội tiết,hoa.ngo@benhvien.vn,BV001243,16,09:00-18:00,500000.0,false
+D000011,Lý Văn Sơn,true,0903579468,Tiêu hóa,son.ly@benhvien.vn,BV001244,9,08:00-17:00,400000.0,false
+D000012,Dương Thị Phương,false,0914680579,Hô hấp,phuong.duong@benhvien.vn,BV001245,12,07:30-16:30,450000.0,false
+D000013,Phạm Quang Hùng,true,0925791346,Tiết niệu,hung.pham@benhvien.vn,BV001246,17,08:00-17:00,520000.0,false
+D000014,Vũ Thị Thanh,false,0936802468,Tâm thần,thanh.vu@benhvien.vn,BV001247,7,08:00-17:00,380000.0,false
+D000015,Trần Văn Long,true,0947913580,Chẩn đoán hình ảnh,long.tran@benhvien.vn,BV001248,10,09:00-18:00,480000.0,false
+D000016,Cao Thị Mai,false,0958024691,Gây mê hồi sức,mai.cao@benhvien.vn,BV001249,11,08:00-17:00,530000.0,false
+D000017,Đoàn Minh Khoa,true,0969135802,Cấp cứu,khoa.doan@benhvien.vn,BV001250,13,07:00-16:00,600000.0,false
+D000018,Nguyễn Văn Bình,true,0970246913,Bác sĩ gia đình,binh.nguyen@benhvien.vn,BV001251,20,08:00-16:00,420000.0,false
+D000019,Phạm Thị Hồng,false,0981358024,Nội tổng quát,hong.pham@benhvien.vn,BV001252,18,09:00-18:00,500000.0,false
+D000020,Trần Quốc Tuấn,true,0992468135,Chưa xác định,tuan.tran@benhvien.vn,BV001253,6,08:00-17:00,300000.0,false
+D000021,Lê Thị Bích,false,0902468135,Hô hấp,bich.le@benhvien.vn,BV001254,10,08:00-17:00,390000.0,false
+D000022,Nguyễn Văn Phát,true,0913579246,Da liễu,phat.nguyen@benhvien.vn,BV001255,6,09:00-17:00,370000.0,false
+D000023,Phan Thị Tâm,false,0924680357,Nhi khoa,tam.phan@benhvien.vn,BV001256,12,07:30-16:30,410000.0,false
+D000024,Bùi Văn Lộc,true,0935791468,Chấn thương chỉnh hình,loc.bui@benhvien.vn,BV001257,8,08:00-17:00,560000.0,false
+D000025,Trần Thanh Mai,false,0946802579,Sản phụ khoa,mai.tran@benhvien.vn,BV001258,14,09:00-18:00,470000.0,false
+D000026,Đào Minh Đức,true,0957913680,Tim mạch,duc.dao@benhvien.vn,BV001259,11,08:00-17:00,510000.0,false
+D000027,Ngô Thị Hạnh,false,0968024791,Tai mũi họng,hanh.ngo@benhvien.vn,BV001260,9,08:30-17:30,440000.0,false
+D000028,Vũ Văn Long,true,0979135802,Ngoại khoa,long.vu@benhvien.vn,BV001261,16,09:00-18:00,590000.0,false
+D000029,Phạm Thị Tuyết,false,0980246913,Nội tiết,tuyet.pham@benhvien.vn,BV001262,13,08:00-17:00,520000.0,false
+D000030,Hoàng Văn Tài,true,0991358024,Tiêu hóa,tai.hoang@benhvien.vn,BV001263,7,08:00-17:00,430000.0,false
+D000031,Phan Thanh Hà,true,0334370822,Ngoại khoa,hathanh.0113@gmail.com,BV902357235,3,08:00-17:00,600000.0,true

@@ -1,6 +1,6 @@
 package case_study_hospital_management.controller;
 
-import case_study_hospital_management.common.constants.PatientMenuSelection;
+import case_study_hospital_management.common.constants.PatientMenuConstants;
 import case_study_hospital_management.entity.PatientEntity;
 import case_study_hospital_management.service.PatientService;
 import case_study_hospital_management.service.impl.PatientServiceImpl;
@@ -35,25 +35,25 @@ public class PatientController {
             choice = CommonView.inputFeatureSelection();
             shouldShowMenu = true;
             switch (choice) {
-                case PatientMenuSelection.REGISTER_PATIENT:
+                case PatientMenuConstants.REGISTER_PATIENT:
                     registerPatient();
                     break;
-                case PatientMenuSelection.SEARCH_PATIENT:
+                case PatientMenuConstants.SEARCH_PATIENT:
                     searchPatient();
                     break;
-                case PatientMenuSelection.LIST_PATIENT:
+                case PatientMenuConstants.LIST_PATIENT:
                     displayPatientList();
                     break;
-                case PatientMenuSelection.UPDATE_PATIENT:
+                case PatientMenuConstants.UPDATE_PATIENT:
                     updatePatient();
                     break;
-                case PatientMenuSelection.DELETE_PATIENT:
+                case PatientMenuConstants.DELETE_PATIENT:
                     deletePatient();
                     break;
-                case PatientMenuSelection.STATISTIC_PATIENT:
-                    System.out.println("Đang update chức năng thống kê.....");
+                case PatientMenuConstants.STATISTIC_PATIENT:
+                    statisticPatient();
                     break;
-                case PatientMenuSelection.RETURN:
+                case PatientMenuConstants.RETURN:
                     return;
                 default:
                     shouldShowMenu = false;
@@ -70,16 +70,16 @@ public class PatientController {
         while (true) {
             choice = CommonView.inputFeatureSelection();
             switch (choice) {
-                case PatientMenuSelection.SEARCH_PATIENT_BY_ID:
+                case PatientMenuConstants.SEARCH_PATIENT_BY_ID:
                     searchPatientById();
                     return;
-                case PatientMenuSelection.SEARCH_PATIENT_BY_NAME:
+                case PatientMenuConstants.SEARCH_PATIENT_BY_NAME:
                     searchPatientByName();
                     return;
-                case PatientMenuSelection.SEARCH_PATIENT_BY_PHONE_NUMBER:
+                case PatientMenuConstants.SEARCH_PATIENT_BY_PHONE_NUMBER:
                     searchPatientByPhoneNumber();
                     return;
-                case PatientMenuSelection.RETURN:
+                case PatientMenuConstants.RETURN:
                     return;
                 default:
                     ConsoleUtil.printlnYellow("Không có tính năng phù hợp. Vui lòng chọn lại.");
@@ -93,9 +93,14 @@ public class PatientController {
         foundPatients = patientService.findByPhoneNumber(phoneNumber);
         if (!foundPatients.isEmpty()) {
             ConsoleUtil.printlnGreen("Tìm thấy " + foundPatients.size() + " bệnh nhân số điện thoại có chứa \"" + phoneNumber + "\"");
-            patientView.display(foundPatients);
+            if (foundPatients.size() == 1) {
+                patientView.showDetail(foundPatients.get(0));
+                displayDetailMenu(foundPatients.get(0));
+            } else {
+                patientView.display(foundPatients);
+            }
         } else {
-            ConsoleUtil.printlnYellow("Không tìm thấy bệnh nhân nào mà thoại có chứa \"" + phoneNumber + "\"");
+            ConsoleUtil.printlnYellow("Không tìm thấy bệnh nhân nào mà số điện thoại có chứa \"" + phoneNumber + "\"");
         }
     }
 
@@ -105,7 +110,12 @@ public class PatientController {
         foundPatients = patientService.findByName(name);
         if (!foundPatients.isEmpty()) {
             ConsoleUtil.printlnGreen("Tìm thấy " + foundPatients.size() + " bệnh nhân tên có chứa \"" + name + "\"");
-            patientView.display(foundPatients);
+            if (foundPatients.size() == 1) {
+                patientView.showDetail(foundPatients.get(0));
+                displayDetailMenu(foundPatients.get(0));
+            } else {
+                patientView.display(foundPatients);
+            }
         } else {
             ConsoleUtil.printlnYellow("Không tìm thấy bệnh nhân nào mà tên có chứa \"" + name + "\"");
         }
@@ -123,19 +133,42 @@ public class PatientController {
         }
     }
 
+    private void statisticPatient() {
+        int choice;
+        patientView.displayStatisticMenu();
+        while (true) {
+            choice = CommonView.inputFeatureSelection();
+            switch (choice) {
+                case PatientMenuConstants.STATISTIC_PATIENT_BY_AGE_GROUP:
+                    CommonView.displayStatistic(patientService.statisticByAge(), "Độ tuổi", "Số lượng", "THỐNG KÊ BỆNH NHÂN THEO ĐỘ TUỔI");
+                    return;
+                case PatientMenuConstants.STATISTIC_PATIENT_BY_GENDER:
+                    CommonView.displayStatistic(patientService.statisticByGender(), "Giới tính", "Số lượng", "THỐNG KÊ BỆNH NHÂN THEO GIỚI TÍNH");
+                    return;
+                case PatientMenuConstants.STATISTIC_PATIENT_BY_BLOOD_TYPE:
+                    CommonView.displayStatistic(patientService.statisticByBloodType(), "Nhóm máu", "Số lượng", "THỐNG KÊ BỆNH NHÂN THEO NHÓM MÁU");
+                    return;
+                case PatientMenuConstants.RETURN:
+                    return;
+                default:
+                    ConsoleUtil.printlnYellow("Không có tính năng phù hợp. Vui lòng chọn lại.");
+            }
+        }
+    }
+
     private void displayDetailMenu(PatientEntity patient) {
         int choice;
         patientView.displayDetailMenu();
         while (true) {
             choice = CommonView.inputFeatureSelection();
             switch (choice) {
-                case PatientMenuSelection.UPDATE_PATIENT_IN_DETAIL:
+                case PatientMenuConstants.UPDATE_PATIENT_IN_DETAIL:
                     updatePatient(patient);
                     return;
-                case PatientMenuSelection.DELETE_PATIENT_IN_DETAIL:
+                case PatientMenuConstants.DELETE_PATIENT_IN_DETAIL:
                     deletePatient(patient);
                     return;
-                case PatientMenuSelection.RETURN:
+                case PatientMenuConstants.RETURN:
                     return;
                 default:
                     ConsoleUtil.printlnYellow("Không có tính năng phù hợp. Vui lòng chọn lại.");

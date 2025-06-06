@@ -1,11 +1,12 @@
 package case_study_hospital_management.view;
 
-import case_study_hospital_management.common.constants.Constants;
+import case_study_hospital_management.common.constants.ConfigurationConstants;
 import case_study_hospital_management.common.enums.BloodType;
 import case_study_hospital_management.entity.PatientEntity;
 import case_study_hospital_management.util.ConsoleUtil;
 import case_study_hospital_management.util.DateUtil;
 import case_study_hospital_management.util.InputValidatorUtil;
+import case_study_hospital_management.util.PersonHelper;
 import ss12_java_collection_framework.bai_tap.student_management.util.ConsoleColorUtil;
 
 import java.time.LocalDate;
@@ -25,19 +26,9 @@ public class PatientView {
         return instance;
     }
 
-    private String getGenderDisplay(PatientEntity patient) {
-        String genderDisplay = "Khác";
-        if (patient.getGender() != null && patient.getGender()) {
-            genderDisplay = "Nam";
-        } else if ((patient.getGender() != null && !patient.getGender())) {
-            genderDisplay = "Nữ";
-        }
-        return genderDisplay;
-    }
-
     public void displayMenu() {
         System.out.println();
-        System.out.println("=".repeat(Constants.SEPARATION_LENGTH));
+        System.out.println("=".repeat(ConfigurationConstants.SEPARATION_LENGTH));
         ConsoleUtil.printlnBold("\uD83D\uDC65 QUẢN LÝ BỆNH NHÂN");
         ConsoleUtil.printlnBold("➕ 1. ĐĂNG KÝ BỆNH NHÂN MỚI");
         ConsoleUtil.printlnItalic("\t\uD83D\uDCDD Nhập thông tin bệnh nhân mới vào hệ thống");
@@ -54,7 +45,7 @@ public class PatientView {
         ConsoleUtil.printlnBold("\uD83D\uDCC8 6. THỐNG KÊ BỆNH NHÂN");
         ConsoleUtil.printlnItalic("\t\uD83D\uDCCA Theo độ tuổi, giới tính, nhóm máu");
         ConsoleUtil.printlnBold("\uD83D\uDD19 0. QUAY LẠI MENU CHÍNH");
-        System.out.println("=".repeat(Constants.SEPARATION_LENGTH));
+        System.out.println("=".repeat(ConfigurationConstants.SEPARATION_LENGTH));
     }
 
     public void display(List<PatientEntity> patients, String title) {
@@ -141,7 +132,7 @@ public class PatientView {
                     i,
                     patient.getId(),
                     patient.getFullName(),
-                    getGenderDisplay(patient),
+                    PersonHelper.getGenderDisplay(patient.getGender()),
                     patient.getPhoneNumber(),
                     DateUtil.formatDate(patient.getDob()),
                     patient.getAddress(),
@@ -155,15 +146,15 @@ public class PatientView {
     }
 
     public void showDetail(PatientEntity patient) {
-        System.out.println("=".repeat(Constants.SEPARATION_LENGTH));
+        System.out.println("=".repeat(ConfigurationConstants.SEPARATION_LENGTH));
         ConsoleUtil.printlnBold("\uD83D\uDCDD MÃ BỆNH NHÂN: " + patient.getId());
         ConsoleUtil.printlnBold("\uD83D\uDCC5 NGÀY ĐĂNG KÝ: " + DateUtil.formatDate(patient.getRegistrationDate()));
-        System.out.println("-".repeat(Constants.SEPARATION_LENGTH / 2));
+        System.out.println("-".repeat(ConfigurationConstants.SEPARATION_LENGTH / 2));
         ConsoleUtil.printlnBold("\uD83D\uDC64 THÔNG TIN CÁ NHÂN");
         System.out.print("📝 Họ và tên: ");
         ConsoleUtil.printlnItalic(patient.getFullName());
         System.out.print("\uD83D\uDC64 Giới tính: ");
-        ConsoleUtil.printlnItalic(getGenderDisplay(patient));
+        ConsoleUtil.printlnItalic(PersonHelper.getGenderDisplay(patient.getGender()));
         System.out.print("📞 Số điện thoại: ");
         ConsoleUtil.printlnItalic(patient.getPhoneNumber());
         System.out.print("🎂 Ngày sinh: ");
@@ -172,13 +163,13 @@ public class PatientView {
         ConsoleUtil.printlnItalic(patient.getAddress());
         System.out.print("🆘 Liên hệ khẩn cấp: ");
         ConsoleUtil.printlnItalic(patient.getEmergencyContact());
-        System.out.println("-".repeat(Constants.SEPARATION_LENGTH / 2));
+        System.out.println("-".repeat(ConfigurationConstants.SEPARATION_LENGTH / 2));
         ConsoleUtil.printlnBold("\uD83E\uDE78 THÔNG TIN Y TẾ");
         System.out.print("\uD83E\uDE78 Nhóm máu: ");
         ConsoleUtil.printlnItalic(patient.getBloodType().getDisplayName());
         System.out.print("⚠\uFE0F Dị ứng: ");
         ConsoleUtil.printlnItalic(patient.getAllergies());
-        System.out.println("=".repeat(Constants.SEPARATION_LENGTH));
+        System.out.println("=".repeat(ConfigurationConstants.SEPARATION_LENGTH));
     }
 
     public PatientEntity inputPatient() {
@@ -191,7 +182,7 @@ public class PatientView {
         }
         System.out.println("\uD83D\uDC64 NHẬP THÔNG TIN CÁ NHÂN");
         String fullName = InputValidatorUtil.inputString("📝 Họ và tên: ", "họ và tên", 3, 50, isUpdate);
-        Boolean gender = selectGender(isUpdate);
+        Boolean gender = CommonView.selectGender(isUpdate);
         String phoneNumber = InputValidatorUtil.inputVietnamPhoneNumber("📞 Số điện thoại: ", "số điện thoại", isUpdate);
         LocalDate dob = InputValidatorUtil.inputBirthDate("🎂 Ngày sinh (dd/MM/yyyy): ", "ngày sinh", isUpdate);
         String address = InputValidatorUtil.inputString("🏠 Địa chỉ: ", "địa chỉ", 5, 100, isUpdate);
@@ -212,33 +203,6 @@ public class PatientView {
             return new PatientEntity(patient.getId(), fullName, gender, phoneNumber, dob, address, emergencyContact, bloodType, allergies == null ? "Không" : allergies, patient.getRegistrationDate());
         } else {
             return new PatientEntity(fullName, gender, phoneNumber, dob, address, emergencyContact, bloodType, allergies == null ? "Không" : allergies);
-        }
-    }
-
-    private Boolean selectGender(boolean allowEmpty) {
-        int choice;
-        System.out.println("\uD83D\uDC64 Chọn giới tính:\t1. Nam\t2. Nữ\t3. Khác");
-        while (true) {
-            try {
-                System.out.print("Lựa chọn của bạn: ");
-                String input = sc.nextLine();
-                if (input.isEmpty() && allowEmpty) {
-                    return null;
-                }
-                choice = Integer.parseInt(input);
-                switch (choice) {
-                    case 1:
-                        return true;
-                    case 2:
-                        return false;
-                    case 3:
-                        return null;
-                    default:
-                        ConsoleColorUtil.printlnRed("Vui lòng nhập 1 số nguyên tương ứng với giới tính.");
-                }
-            } catch (NumberFormatException e) {
-                ConsoleColorUtil.printlnRed("Vui lòng nhập 1 số nguyên tương ứng với giới tính.");
-            }
         }
     }
 
@@ -279,5 +243,11 @@ public class PatientView {
         System.out.println("✏\uFE0F 1. Cập nhật thông tin");
         System.out.println("\uD83D\uDDD1\uFE0F 2. Xoá bệnh nhân");
         System.out.println("\uD83D\uDD19 0. Trở về");
+    }
+
+    public void displayStatisticMenu() {
+        System.out.println("\uD83D\uDCC5 1. Thống kê theo độ tuổi");
+        System.out.println("\uD83D\uDC64 2. Thống kê theo giới tính");
+        System.out.println("\uD83E\uDE78 3. Thống kê theo nhóm máu");
     }
 }

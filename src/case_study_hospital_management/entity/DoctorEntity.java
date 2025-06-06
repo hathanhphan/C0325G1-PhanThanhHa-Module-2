@@ -1,17 +1,29 @@
 package case_study_hospital_management.entity;
 
 import case_study_hospital_management.common.enums.DoctorSpecialization;
+import case_study_hospital_management.util.CSVUtil;
+import case_study_hospital_management.util.DateUtil;
 
 public class DoctorEntity extends PersonEntity {
     private DoctorSpecialization specialization;
     private String email;
     private String licenseNumber;
-    private int yearOfExperience;
+    private Integer yearOfExperience;
     private String workingHours;
-    private double consultationFee;
+    private Double consultationFee;
 
-    public DoctorEntity(String id, String fullName, Boolean gender, String phoneNumber, DoctorSpecialization specialization, String email, String licenseNumber, int yearOfExperience, String workingHours, double consultationFee) {
+    public DoctorEntity(String id, String fullName, Boolean gender, String phoneNumber, DoctorSpecialization specialization, String email, String licenseNumber, Integer yearOfExperience, String workingHours, Double consultationFee) {
         super(id, fullName, gender, phoneNumber);
+        this.specialization = specialization;
+        this.email = email;
+        this.licenseNumber = licenseNumber;
+        this.yearOfExperience = yearOfExperience;
+        this.workingHours = workingHours;
+        this.consultationFee = consultationFee;
+    }
+
+    public DoctorEntity(String fullName, Boolean gender, String phoneNumber, DoctorSpecialization specialization, String email, String licenseNumber, Integer yearOfExperience, String workingHours, Double consultationFee) {
+        super(fullName, gender, phoneNumber);
         this.specialization = specialization;
         this.email = email;
         this.licenseNumber = licenseNumber;
@@ -44,11 +56,11 @@ public class DoctorEntity extends PersonEntity {
         this.licenseNumber = licenseNumber;
     }
 
-    public int getYearOfExperience() {
+    public Integer getYearOfExperience() {
         return yearOfExperience;
     }
 
-    public void setYearOfExperience(int yearOfExperience) {
+    public void setYearOfExperience(Integer yearOfExperience) {
         this.yearOfExperience = yearOfExperience;
     }
 
@@ -60,11 +72,27 @@ public class DoctorEntity extends PersonEntity {
         this.workingHours = workingHours;
     }
 
-    public double getConsultationFee() {
+    public Double getConsultationFee() {
         return consultationFee;
     }
 
-    public void setConsultationFee(double consultationFee) {
+    public void setConsultationFee(Double consultationFee) {
         this.consultationFee = consultationFee;
+    }
+
+    @Override
+    public String toString() {
+        return String.join(",",
+                CSVUtil.escapeCSV(getId()),
+                CSVUtil.escapeCSV(getFullName()),
+                String.valueOf(getGender()),
+                CSVUtil.escapeCSV(getPhoneNumber()),
+                CSVUtil.escapeCSV(specialization.getDisplayName()),
+                CSVUtil.escapeCSV(email),
+                CSVUtil.escapeCSV(licenseNumber),
+                yearOfExperience.toString(),
+                CSVUtil.escapeCSV(workingHours),
+                consultationFee.toString(),
+                String.valueOf(getDeleted()));
     }
 }

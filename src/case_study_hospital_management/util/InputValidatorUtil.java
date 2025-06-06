@@ -1,6 +1,6 @@
 package case_study_hospital_management.util;
 
-import case_study_hospital_management.common.constants.Constants;
+import case_study_hospital_management.common.constants.ConfigurationConstants;
 import ss12_java_collection_framework.bai_tap.student_management.util.ConsoleColorUtil;
 
 import java.time.LocalDate;
@@ -29,13 +29,13 @@ public class InputValidatorUtil {
                 long value = Long.parseLong(input);
                 if (value < 0) {
                     ConsoleColorUtil.printlnRed(
-                            String.format("%s phải là số dương!", capitalize(displayName)));
+                            String.format("%s phải là số nguyên dương!", capitalize(displayName)));
                     continue;
                 }
                 return value;
             } catch (NumberFormatException e) {
                 ConsoleColorUtil.printlnRed(
-                        String.format("%s phải là số!", capitalize(displayName)));
+                        String.format("%s phải là số nguyên dương!", capitalize(displayName)));
             }
         }
     }
@@ -58,6 +58,28 @@ public class InputValidatorUtil {
     }
 
     // Validate số thực theo min/max, cho phép null
+    public static Integer inputInteger(String prompt, String displayName, int min, int max, boolean allowEmpty) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine();
+            if (allowEmpty && input.isEmpty()) {
+                return null;
+            }
+            try {
+                int value = Integer.parseInt(input);
+                if (value < min || value > max) {
+                    ConsoleColorUtil.printlnRed(
+                            String.format("Giá trị của %s phải từ %d đến %d.", displayName, min, max));
+                    continue;
+                }
+                return value;
+            } catch (NumberFormatException e) {
+                ConsoleColorUtil.printlnRed(
+                        String.format("%s phải là số nguyên!", capitalize(displayName)));
+            }
+        }
+    }
+
     public static Float inputFloat(String prompt, String displayName, float min, float max, boolean allowEmpty) {
         while (true) {
             System.out.print(prompt);
@@ -67,6 +89,28 @@ public class InputValidatorUtil {
             }
             try {
                 float value = Float.parseFloat(input);
+                if (value < min || value > max) {
+                    ConsoleColorUtil.printlnRed(
+                            String.format("Giá trị của %s phải từ %.2f đến %.2f.", displayName, min, max));
+                    continue;
+                }
+                return value;
+            } catch (NumberFormatException e) {
+                ConsoleColorUtil.printlnRed(
+                        String.format("%s phải là số thực!", capitalize(displayName)));
+            }
+        }
+    }
+
+    public static Double inputDouble(String prompt, String displayName, double min, double max, boolean allowEmpty) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine();
+            if (allowEmpty && input.isEmpty()) {
+                return null;
+            }
+            try {
+                double value = Double.parseDouble(input);
                 if (value < min || value > max) {
                     ConsoleColorUtil.printlnRed(
                             String.format("Giá trị của %s phải từ %.2f đến %.2f.", displayName, min, max));
@@ -134,7 +178,7 @@ public class InputValidatorUtil {
             }
 
             try {
-                LocalDate date = LocalDate.parse(input, Constants.DATE_FORMATTER);
+                LocalDate date = LocalDate.parse(input, ConfigurationConstants.DATE_FORMATTER);
 
                 // Kiểm tra ngày có hợp lệ không (không quá xa trong quá khứ hoặc tương lai)
                 LocalDate minDate = LocalDate.of(1900, 1, 1);
@@ -144,8 +188,8 @@ public class InputValidatorUtil {
                     ConsoleColorUtil.printlnRed(
                             String.format("%s phải trong khoảng từ %s đến %s!",
                                     capitalize(displayName),
-                                    minDate.format(Constants.DATE_FORMATTER),
-                                    maxDate.format(Constants.DATE_FORMATTER)));
+                                    minDate.format(ConfigurationConstants.DATE_FORMATTER),
+                                    maxDate.format(ConfigurationConstants.DATE_FORMATTER)));
                     continue;
                 }
 
@@ -214,7 +258,7 @@ public class InputValidatorUtil {
                     ConsoleColorUtil.printlnRed(
                             String.format("%s không được quá %s!",
                                     capitalize(displayName),
-                                    maxDate.format(Constants.DATE_FORMATTER)));
+                                    maxDate.format(ConfigurationConstants.DATE_FORMATTER)));
                     continue;
                 }
 
@@ -242,13 +286,56 @@ public class InputValidatorUtil {
             }
 
             try {
-                LocalTime time = LocalTime.parse(input, Constants.TIME_FORMATTER);
+                LocalTime time = LocalTime.parse(input, ConfigurationConstants.TIME_FORMATTER);
                 return time;
             } catch (DateTimeParseException e) {
                 ConsoleColorUtil.printlnRed(
                         String.format("%s không hợp lệ! Vui lòng nhập theo định dạng HH:mm.",
                                 capitalize(displayName)));
             }
+        }
+    }
+
+    // Validate giờ làm việc (7:00 - 18:00)
+    public static LocalTime inputWorkingTime(String prompt, String displayName, boolean allowEmpty) {
+        while (true) {
+            LocalTime time = inputTime(prompt, displayName, allowEmpty);
+            if (time == null && allowEmpty) {
+                return null;
+            }
+            if (time != null) {
+                LocalTime startWork = LocalTime.of(7, 0);
+                LocalTime endWork = LocalTime.of(18, 0);
+
+                if (time.isBefore(startWork) || time.isAfter(endWork)) {
+                    ConsoleColorUtil.printlnRed(
+                            String.format("%s phải trong giờ làm việc (07:00 - 18:00)!",
+                                    capitalize(displayName)));
+                    continue;
+                }
+                return time;
+            }
+        }
+    }
+
+    // Validate khoảng thời gian (startTime < endTime)
+    public static LocalTime inputTimeRange(String prompt, String displayName, LocalTime startTime, boolean allowEmpty) {
+        while (true) {
+            LocalTime time = inputTime(prompt, displayName, allowEmpty);
+            if (time == null && allowEmpty) {
+                return null;
+            }
+            if (time != null && startTime != null) {
+                if (time.isBefore(startTime) || time.equals(startTime)) {
+                    ConsoleColorUtil.printlnRed(
+                            String.format("%s phải sau %s!",
+                                    capitalize(displayName),
+                                    startTime.format(ConfigurationConstants.TIME_FORMATTER)));
+                    continue;
+                }
+                return time;
+            }
+            return time;
         }
     }
 }

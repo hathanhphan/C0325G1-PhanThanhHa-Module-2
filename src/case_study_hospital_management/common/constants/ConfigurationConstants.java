@@ -2,7 +2,7 @@ package case_study_hospital_management.common.constants;
 
 import java.time.format.DateTimeFormatter;
 
-public class Constants {
+public class ConfigurationConstants {
     public static final String DATA_FOLDER = "D:/CodeGym/module2/src/case_study_hospital_management/data/";
     public static final String PATIENTS_FILE = "patients.csv";
     public static final String DOCTORS_FILE = "doctors.csv";

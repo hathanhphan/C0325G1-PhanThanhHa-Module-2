@@ -44,7 +44,7 @@ public enum DoctorSpecialization {
                 return spec;
             }
         }
-        return UNKNOWN;
+        throw new IllegalArgumentException();
     }
 
     public static DoctorSpecialization fromCode(String code) {
@@ -53,6 +53,15 @@ public enum DoctorSpecialization {
                 return spec;
             }
         }
-        return UNKNOWN;
+        throw new IllegalArgumentException();
+    }
+
+    public static DoctorSpecialization from(String value) {
+        for (DoctorSpecialization spec : values()) {
+            if (spec.displayName.equalsIgnoreCase(value) || spec.code.equalsIgnoreCase(value)) {
+                return spec;
+            }
+        }
+        throw new IllegalArgumentException();
     }
 }
