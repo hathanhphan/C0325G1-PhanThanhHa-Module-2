@@ -53,4 +53,28 @@ public class ConsoleUtil {
     public static void println(String color, String msg) {
         System.out.println(color + msg + RESET);
     }
+
+    public static String formatRed(String msg) {
+        return RED + msg + RESET;
+    }
+
+    public static String formatGreen(String msg) {
+        return GREEN + msg + RESET;
+    }
+
+    public static String formatYellow(String msg) {
+        return YELLOW + msg + RESET;
+    }
+
+    public static String formatBold(String msg) {
+        return BOLD + msg + RESET;
+    }
+
+    public static String formatItalic(String msg) {
+        return ITALIC + msg + RESET;
+    }
+
+    public static String format(String color, String msg) {
+        return color + msg + RESET;
+    }
 }

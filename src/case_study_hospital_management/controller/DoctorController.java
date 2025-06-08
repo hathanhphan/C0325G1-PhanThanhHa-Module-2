@@ -39,6 +39,7 @@ public class DoctorController {
             switch (choice) {
                 case DoctorMenuConstants.ADD_DOCTOR:
                     addDoctor();
+                    CommonView.displayContinueAction();
                     break;
                 case DoctorMenuConstants.SEARCH_DOCTOR:
                     searchDoctor();
@@ -48,9 +49,11 @@ public class DoctorController {
                     break;
                 case DoctorMenuConstants.UPDATE_DOCTOR:
                     updateDoctor();
+                    CommonView.displayContinueAction();
                     break;
                 case DoctorMenuConstants.DELETE_DOCTOR:
                     deleteDoctor();
+                    CommonView.displayContinueAction();
                     break;
                 case DoctorMenuConstants.RETURN:
                     return;
@@ -58,14 +61,13 @@ public class DoctorController {
                     shouldShowMenu = false;
                     ConsoleUtil.printlnYellow("Không có tính năng phù hợp. Vui lòng chọn lại.");
             }
-            System.out.print("Nhấn phím bất kí để tiếp tục...");
-            sc.nextLine();
         }
     }
 
     private void displayDoctorList() {
         List<DoctorEntity> doctors = doctorService.getAll();
         doctorView.display(doctors);
+        displaySelectDoctor(doctors);
     }
 
     private void addDoctor() {
@@ -114,6 +116,7 @@ public class DoctorController {
                 displayDetailMenu(foundDoctors.get(0));
             } else {
                 doctorView.display(foundDoctors);
+                displaySelectDoctor(foundDoctors);
             }
         } else {
             ConsoleUtil.printlnYellow("Không tìm thấy bệnh nhân nào mà tên có chứa \"" + name + "\"");
@@ -131,6 +134,7 @@ public class DoctorController {
                 displayDetailMenu(foundDoctors.get(0));
             } else {
                 doctorView.display(foundDoctors);
+                displaySelectDoctor(foundDoctors);
             }
         } else {
             ConsoleUtil.printlnYellow("Không tìm thấy bệnh nhân nào thuộc chuyên ngành \"" + spec.getDisplayName() + "\"");
@@ -148,6 +152,7 @@ public class DoctorController {
                 displayDetailMenu(foundDoctors.get(0));
             } else {
                 doctorView.display(foundDoctors);
+                displaySelectDoctor(foundDoctors);
             }
         } else {
             ConsoleUtil.printlnYellow("Không tìm thấy bác sĩ nào mà số điện thoại có chứa \"" + phoneNumber + "\"");
@@ -166,6 +171,7 @@ public class DoctorController {
                 displayDetailMenu(foundDoctors.get(0));
             } else {
                 doctorView.display(foundDoctors);
+                displaySelectDoctor(foundDoctors);
             }
         } else {
             ConsoleUtil.printlnYellow("Không tìm thấy bác sĩ nào có số năm kinh nghiệm là \"" + yearOfExperience + "\"");
@@ -236,5 +242,17 @@ public class DoctorController {
             ConsoleUtil.printlnYellow("Không tìm thấy bác sĩ nào có mã " + id);
         }
 
+    }
+
+    private void displaySelectDoctor(List<DoctorEntity> doctors) {
+        System.out.println("Nhập [STT] tương ứng để tương tác chi tiết với bác sĩ. Hoặc [ENTER] để tiếp tục...");
+        String input = CommonView.inputStringKeyword("Lựa chọn của bạn: ");
+        try {
+            int choice = Integer.parseInt(input);
+            if (choice >= 1 && choice <= doctors.size()) {
+                doctorView.showDetail(doctors.get(choice - 1));
+                displayDetailMenu(doctors.get(choice - 1));
+            }
+        } catch (NumberFormatException ignored) {}
     }
 }

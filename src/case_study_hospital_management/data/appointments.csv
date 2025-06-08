@@ -1,0 +1,58 @@
+A000001,P000001,D000001,07/06/2025,08:00-08:30,COMPLETED,Khám tim định kỳ,Bệnh nhân có tiền sử tăng huyết áp,,,,false
+A000002,P000002,D000002,07/06/2025,08:30-09:00,COMPLETED,Khám tổng quát cho trẻ em,Bé sốt nhẹ khám lần đầu,,,,false
+A000003,P000003,D000003,07/06/2025,09:00-09:30,SCHEDULED,Khám hậu phẫu thuật ruột thừa,Chưa có dấu hiệu bất thường,,,,false
+A000004,P000004,D000004,07/06/2025,09:30-10:00,COMPLETED,Khám thai định kỳ,Thai 28 tuần phát triển tốt,,,,false
+A000005,P000005,D000005,07/06/2025,10:00-10:30,SCHEDULED,Đau đầu kéo dài,Đây là lần đầu khám thần kinh,,,,false
+A000006,P000006,D000006,07/06/2025,10:30-11:00,COMPLETED,Khám da dị ứng,Bệnh nhân dị ứng thời tiết,,,,false
+A000007,P000007,D000007,07/06/2025,11:00-11:30,COMPLETED,Đau lưng sau tai nạn,Đã chụp X-quang,,,,false
+A000008,P000008,D000008,07/06/2025,13:00-13:30,SCHEDULED,Khám mắt mờ,Bệnh nhân thường xuyên dùng máy tính,,,,false
+A000009,P000009,D000009,07/06/2025,13:30-14:00,COMPLETED,Khám viêm xoang,Bệnh nhân hay đau đầu buổi sáng,,,,false
+A000010,P000010,D000010,07/06/2025,14:00-14:30,COMPLETED,Khám nội tiết,Kiểm tra đường huyết định kỳ,,,,false
+A000011,P000011,D000011,07/06/2025,14:30-15:00,SCHEDULED,Đau bụng,Chưa xác định nguyên nhân,,,,false
+A000012,P000012,D000012,07/06/2025,15:00-15:30,COMPLETED,Khám phổi,Ho kéo dài 2 tuần,,,,false
+A000013,P000013,D000013,07/06/2025,15:30-16:00,SCHEDULED,Khám tiết niệu,Tiểu buốt nhẹ,,,,false
+A000014,P000014,D000014,07/06/2025,16:00-16:30,SCHEDULED,Khám tâm thần,Mất ngủ lo âu,,,,false
+A000015,P000015,D000015,07/06/2025,16:30-17:00,COMPLETED,Chụp cộng hưởng từ (MRI),Kiểm tra sau chấn thương,,,,false
+A000016,P000016,D000016,08/06/2025,08:00-08:30,SCHEDULED,Tiền mê trước mổ,Chuẩn bị phẫu thuật cột sống,,,,false
+A000017,P000017,D000017,08/06/2025,08:30-09:00,SCHEDULED,Khám cấp cứu,Đau ngực đột ngột,,,,false
+A000018,P000018,D000018,08/06/2025,09:00-09:30,COMPLETED,Khám bác sĩ gia đình,Khám sức khỏe tổng quát,,,,false
+A000019,P000019,D000019,08/06/2025,09:30-10:00,SCHEDULED,Khám nội tổng quát,Bệnh nhân đau dạ dày,,,,false
+A000020,P000020,D000020,08/06/2025,10:00-10:30,SCHEDULED,Khám chuyên khoa chưa xác định,Bệnh nhân cần tư vấn,,,,false
+A000021,P000001,D000001,08/06/2025,10:30-11:00,SCHEDULED,Tái khám tim mạch,Kiểm tra lại sau điều trị,,,,false
+A000022,P000002,D000002,08/06/2025,11:00-11:30,SCHEDULED,Khám tiêu hóa,Bé đau bụng đi ngoài nhiều lần,,,,false
+A000023,P000003,D000003,08/06/2025,13:00-13:30,COMPLETED,Khám ngoại khoa,Kiểm tra vết mổ,,,,false
+A000024,P000004,D000004,08/06/2025,13:30-14:00,SCHEDULED,Khám sản phụ,Bệnh nhân có dấu hiệu chuyển dạ,,,,false
+A000025,P000005,D000005,08/06/2025,14:00-14:30,CANCELLED,Đau đầu dữ dội,Bệnh nhân báo bận đột xuất,,,,false
+A000026,P000006,D000006,08/06/2025,14:30-15:00,COMPLETED,Khám dị ứng,Da nổi mề đay,,,,false
+A000027,P000007,D000007,08/06/2025,15:00-15:30,SCHEDULED,Khám chỉnh hình,Đau khớp vai,,,,false
+A000028,P000008,D000008,08/06/2025,15:30-16:00,COMPLETED,Kiểm tra mắt,Kiểm tra sau điều trị cận thị,,,,false
+A000029,P000009,D000009,08/06/2025,16:00-16:30,COMPLETED,Khám tai mũi họng,Viêm họng mãn tính,,,,false
+A000030,P000010,D000010,08/06/2025,16:30-17:00,COMPLETED,Khám nội tiết,Điều chỉnh liều thuốc,,,,false
+A000031,P000011,D000011,09/06/2025,08:00-08:30,SCHEDULED,Khám tiêu hóa,Đau bụng thượng vị,,,,false
+A000032,P000012,D000012,09/06/2025,08:30-09:00,CANCELLED,Khám hô hấp,Bệnh nhân báo hoãn lịch vì công tác,,,,false
+A000033,P000013,D000013,09/06/2025,09:00-09:30,NO_SHOW,Khám tiết niệu,Bệnh nhân không đến không lý do,,,,false
+A000034,P000014,D000014,09/06/2025,09:30-10:00,COMPLETED,Khám tâm thần,Điều trị mất ngủ,,,,false
+A000035,P000015,D000015,09/06/2025,10:00-10:30,COMPLETED,Kiểm tra MRI lại,Kết quả tốt,,,,false
+A000036,P000016,D000016,09/06/2025,10:30-11:00,SCHEDULED,Tiền mê trước mổ,Chuẩn bị cho ca mổ,,,,false
+A000037,P000017,D000017,09/06/2025,11:00-11:30,SCHEDULED,Khám cấp cứu,Đau bụng dữ dội,,,,false
+A000038,P000018,D000018,09/06/2025,13:00-13:30,COMPLETED,Khám bác sĩ gia đình,Khám lại sau 3 tháng,,,,false
+A000039,P000019,D000019,09/06/2025,13:30-14:00,SCHEDULED,Khám nội tổng quát,Bệnh nhân mệt mỏi kéo dài,,,,false
+A000040,P000011,D000020,09/06/2025,14:00-14:30,SCHEDULED,Tư vấn sức khỏe,Tư vấn dinh dưỡng,,,,false
+A000041,P000013,D000021,10/06/2025,08:00-08:30,SCHEDULED,Khám hô hấp khó thở,Bệnh nhân thường xuyên ho về đêm,,,,false
+A000042,P000022,D000022,10/06/2025,08:30-09:00,COMPLETED,Khám da liễu,Chẩn đoán viêm da cơ địa,,,,false
+A000043,P000010,D000023,10/06/2025,09:00-09:30,SCHEDULED,Khám nhi,Trẻ sốt cao 2 ngày,,,,false
+A000044,P000024,D000024,10/06/2025,09:30-10:00,SCHEDULED,Khám chỉnh hình,Khớp gối lỏng lẻo,,,,false
+A000045,P000011,D000025,10/06/2025,10:00-10:30,COMPLETED,Khám sản phụ,Kiểm tra thai kỳ tuần 20,,,,false
+A000046,P000009,D000026,10/06/2025,10:30-11:00,COMPLETED,Khám tim mạch,Tăng huyết áp cần theo dõi,,,,false
+A000047,P000005,D000027,10/06/2025,11:00-11:30,SCHEDULED,Khám tai mũi họng,Viêm xoang mũi dị ứng,,,,false
+A000048,P000001,D000028,10/06/2025,13:00-13:30,SCHEDULED,Khám ngoại khoa,Kiểm tra vết mổ bụng,,,,false
+A000049,P000002,D000029,10/06/2025,13:30-14:00,COMPLETED,Khám nội tiết,Điều chỉnh insulin,,,,false
+A000050,P000005,D000030,10/06/2025,14:00-14:30,SCHEDULED,Khám tiêu hóa,Đau bụng dưới kéo dài,,,,false
+A000051,P000006,D000006,08/06/2025,14:30-15:00,RESCHEDULED,Khám dị ứng,Đã dời lịch sang 11/06/2025,A000051,A000052,Bệnh nhân bận công tác,false
+A000052,P000006,D000006,11/06/2025,14:30-15:00,SCHEDULED,Khám dị ứng,Lịch dời từ 08/06/2025,A000051,,,false
+A000053,P000015,D000015,09/06/2025,10:00-10:30,RESCHEDULED,Kiểm tra MRI lại,Đã dời lịch sang 12/06/2025,A000053,A000054,Thiết bị MRI bảo trì,false
+A000054,P000015,D000015,12/06/2025,10:00-10:30,SCHEDULED,Kiểm tra MRI lại,Lịch dời từ 09/06/2025,A000053,,,false
+A000055,P000009,D000009,08/06/2025,16:00-16:30,RESCHEDULED,Khám tai mũi họng,Đã dời lịch sang 13/06/2025,A000055,A000056,Bệnh nhân yêu cầu dời,false
+A000056,P000009,D000009,13/06/2025,16:00-16:30,SCHEDULED,Khám tai mũi họng,Lịch dời từ 08/06/2025,A000055,,,false
+A000057,P000001,D000009,08/06/2025,08:30-09:00,SCHEDULED,Nhức tai,Nổi mẫn đỏ,,,,false
+A000058,P000001,D000009,08/06/2025,09:00-09:30,SCHEDULED,Nhức tai,hình như là nổi mụn nhọt,,,,false

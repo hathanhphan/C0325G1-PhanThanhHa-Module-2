@@ -23,6 +23,7 @@ public class DoctorServiceImpl implements DoctorService {
         }
         return instance;
     }
+
     @Override
     public boolean add(DoctorEntity doctor) {
         doctor.setId(generateId());
@@ -52,6 +53,11 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public List<DoctorEntity> findByPhoneNumber(String phoneNumber) {
         return doctorRepository.findByPhoneNumber(phoneNumber);
+    }
+
+    @Override
+    public List<DoctorEntity> findByKeyword(String keyword) {
+        return doctorRepository.findByKeyword(keyword);
     }
 
     @Override

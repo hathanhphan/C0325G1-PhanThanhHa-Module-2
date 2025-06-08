@@ -10,6 +10,7 @@ public interface PatientService extends IService<PatientEntity> {
     boolean registerPatient(PatientEntity patient);
     List<PatientEntity> findByName(String name);
     List<PatientEntity> findByPhoneNumber(String phoneNumber);
+    List<PatientEntity> findByKeyword(String keyword);
     Map<String, Integer> statisticByAge();
     Map<String, Integer> statisticByGender();
     Map<String, Integer> statisticByBloodType();

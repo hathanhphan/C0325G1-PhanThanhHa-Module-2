@@ -1,6 +1,8 @@
 package case_study_hospital_management.entity;
 
 import case_study_hospital_management.common.enums.AppointmentStatus;
+import case_study_hospital_management.util.CSVUtil;
+import case_study_hospital_management.util.DateUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -10,16 +12,33 @@ public class AppointmentEntity {
     private String patientId;
     private String doctorId;
     private LocalDate appointmentDate;
-    private LocalTime appointmentTime;
+    private String appointmentTime;
     private AppointmentStatus status;
     private String reason;
     private String notes;
     private String parentAppointmentId;
     private String newAppointmentId;
     private String rescheduleReason;
+    private Boolean isDeleted = false;
 
-    public AppointmentEntity(String id, String patientId, String doctorId, LocalDate appointmentDate, LocalTime appointmentTime, AppointmentStatus status, String reason, String notes, String parentAppointmentId, String newAppointmentId, String rescheduleReason) {
+    private PatientEntity patient;
+    private DoctorEntity doctor;
+
+    public AppointmentEntity(String id, String patientId, String doctorId, LocalDate appointmentDate, String appointmentTime, AppointmentStatus status, String reason, String notes, String parentAppointmentId, String newAppointmentId, String rescheduleReason) {
         this.id = id;
+        this.patientId = patientId;
+        this.doctorId = doctorId;
+        this.appointmentDate = appointmentDate;
+        this.appointmentTime = appointmentTime;
+        this.status = status;
+        this.reason = reason;
+        this.notes = notes;
+        this.parentAppointmentId = parentAppointmentId;
+        this.newAppointmentId = newAppointmentId;
+        this.rescheduleReason = rescheduleReason;
+    }
+
+    public AppointmentEntity(String patientId, String doctorId, LocalDate appointmentDate, String appointmentTime, AppointmentStatus status, String reason, String notes, String parentAppointmentId, String newAppointmentId, String rescheduleReason) {
         this.patientId = patientId;
         this.doctorId = doctorId;
         this.appointmentDate = appointmentDate;
@@ -64,11 +83,11 @@ public class AppointmentEntity {
         this.appointmentDate = appointmentDate;
     }
 
-    public LocalTime getAppointmentTime() {
+    public String getAppointmentTime() {
         return appointmentTime;
     }
 
-    public void setAppointmentTime(LocalTime appointmentTime) {
+    public void setAppointmentTime(String appointmentTime) {
         this.appointmentTime = appointmentTime;
     }
 
@@ -118,5 +137,46 @@ public class AppointmentEntity {
 
     public void setRescheduleReason(String rescheduleReason) {
         this.rescheduleReason = rescheduleReason;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public PatientEntity getPatient() {
+        return patient;
+    }
+
+    public void setPatient(PatientEntity patient) {
+        this.patient = patient;
+    }
+
+    public DoctorEntity getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(DoctorEntity doctor) {
+        this.doctor = doctor;
+    }
+
+    @Override
+    public String toString() {
+        return String.join(",",
+                CSVUtil.escapeCSV(id),
+                CSVUtil.escapeCSV(patientId),
+                CSVUtil.escapeCSV(doctorId),
+                CSVUtil.escapeCSV(DateUtil.formatDate(appointmentDate)),
+                CSVUtil.escapeCSV(appointmentTime),
+                CSVUtil.escapeCSV(status.getCode()),
+                CSVUtil.escapeCSV(reason),
+                CSVUtil.escapeCSV(notes),
+                CSVUtil.escapeCSV(parentAppointmentId),
+                CSVUtil.escapeCSV(newAppointmentId),
+                CSVUtil.escapeCSV(rescheduleReason),
+                String.valueOf(getDeleted()));
     }
 }

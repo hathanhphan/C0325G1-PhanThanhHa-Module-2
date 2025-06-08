@@ -37,6 +37,7 @@ public class PatientController {
             switch (choice) {
                 case PatientMenuConstants.REGISTER_PATIENT:
                     registerPatient();
+                    CommonView.displayContinueAction();
                     break;
                 case PatientMenuConstants.SEARCH_PATIENT:
                     searchPatient();
@@ -46,12 +47,15 @@ public class PatientController {
                     break;
                 case PatientMenuConstants.UPDATE_PATIENT:
                     updatePatient();
+                    CommonView.displayContinueAction();
                     break;
                 case PatientMenuConstants.DELETE_PATIENT:
                     deletePatient();
+                    CommonView.displayContinueAction();
                     break;
                 case PatientMenuConstants.STATISTIC_PATIENT:
                     statisticPatient();
+                    CommonView.displayContinueAction();
                     break;
                 case PatientMenuConstants.RETURN:
                     return;
@@ -59,8 +63,6 @@ public class PatientController {
                     shouldShowMenu = false;
                     ConsoleUtil.printlnYellow("Không có tính năng phù hợp. Vui lòng chọn lại.");
             }
-            System.out.print("Nhấn phím bất kí để tiếp tục...");
-            sc.nextLine();
         }
     }
 
@@ -98,6 +100,7 @@ public class PatientController {
                 displayDetailMenu(foundPatients.get(0));
             } else {
                 patientView.display(foundPatients);
+                displaySelectPatient(foundPatients);
             }
         } else {
             ConsoleUtil.printlnYellow("Không tìm thấy bệnh nhân nào mà số điện thoại có chứa \"" + phoneNumber + "\"");
@@ -115,10 +118,23 @@ public class PatientController {
                 displayDetailMenu(foundPatients.get(0));
             } else {
                 patientView.display(foundPatients);
+                displaySelectPatient(foundPatients);
             }
         } else {
             ConsoleUtil.printlnYellow("Không tìm thấy bệnh nhân nào mà tên có chứa \"" + name + "\"");
         }
+    }
+
+    private void displaySelectPatient(List<PatientEntity> patients) {
+        System.out.println("Nhập [STT] tương ứng để tương tác chi tiết với bệnh nhân. Hoặc [ENTER] để tiếp tục...");
+        String input = CommonView.inputStringKeyword("Lựa chọn của bạn: ");
+        try {
+            int choice = Integer.parseInt(input);
+            if (choice >= 1 && choice <= patients.size()) {
+                patientView.showDetail(patients.get(choice - 1));
+                displayDetailMenu(patients.get(choice - 1));
+            }
+        } catch (NumberFormatException ignored) {}
     }
 
     private void searchPatientById() {
@@ -225,6 +241,7 @@ public class PatientController {
     private void displayPatientList() {
         List<PatientEntity> patients = patientService.getAll();
         patientView.display(patients);
+        displaySelectPatient(patients);
     }
 
     private void registerPatient() {

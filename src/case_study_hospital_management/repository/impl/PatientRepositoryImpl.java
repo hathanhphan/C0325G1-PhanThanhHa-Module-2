@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class PatientRepositoryImpl implements PatientRepository {
     private static PatientRepositoryImpl instance;
-    private String fileName;
+    private final String fileName;
 
     private PatientRepositoryImpl() {
         this.fileName = ConfigurationConstants.PATIENTS_FILE;
@@ -41,6 +41,18 @@ public class PatientRepositoryImpl implements PatientRepository {
     @Override
     public List<PatientEntity> findByPhoneNumber(String phoneNumber) {
         return getCurrentList().stream().filter(p -> p.getPhoneNumber().toLowerCase().contains(phoneNumber.toLowerCase())).toList();
+    }
+
+    @Override
+    public List<PatientEntity> findByKeyword(String keyword) {
+        List<PatientEntity> foundPatients = new ArrayList<>();
+        foundPatients.addAll(findByName(keyword));
+        foundPatients.addAll(findByPhoneNumber(keyword));
+        PatientEntity foundPatientById = findById(keyword);
+        if (foundPatientById != null) {
+            foundPatients.add(foundPatientById);
+        }
+        return foundPatients.stream().distinct().collect(Collectors.toList());
     }
 
     @Override

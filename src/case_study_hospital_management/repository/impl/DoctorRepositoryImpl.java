@@ -4,15 +4,17 @@ import case_study_hospital_management.common.constants.ConfigurationConstants;
 import case_study_hospital_management.common.enums.DoctorSpecialization;
 import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.DoctorEntity;
+import case_study_hospital_management.entity.PatientEntity;
 import case_study_hospital_management.repository.DoctorRepository;
 import case_study_hospital_management.util.CSVUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DoctorRepositoryImpl implements DoctorRepository {
     private static DoctorRepositoryImpl instance;
-    private String fileName;
+    private final String fileName;
 
     private DoctorRepositoryImpl() {
         this.fileName = ConfigurationConstants.DOCTORS_FILE;
@@ -53,6 +55,21 @@ public class DoctorRepositoryImpl implements DoctorRepository {
     @Override
     public List<DoctorEntity> findByPhoneNumber(String phoneNumber) {
         return getCurrentList().stream().filter(d -> d.getPhoneNumber().equals(phoneNumber)).toList();
+    }
+
+    @Override
+    public List<DoctorEntity> findByKeyword(String keyword) {
+        List<DoctorEntity> foundDoctors = new ArrayList<>();
+        foundDoctors.addAll(findByName(keyword));
+        foundDoctors.addAll(findByPhoneNumber(keyword));
+        try {
+            foundDoctors.addAll(findBySpecialization(DoctorSpecialization.from(keyword)));
+        } catch (IllegalArgumentException ignored) {}
+        DoctorEntity foundDoctorById = findById(keyword);
+        if (foundDoctorById != null) {
+            foundDoctors.add(foundDoctorById);
+        }
+        return foundDoctors.stream().distinct().collect(Collectors.toList());
     }
 
     @Override

@@ -1,11 +1,13 @@
 package case_study_hospital_management.util;
 
 import case_study_hospital_management.common.constants.ConfigurationConstants;
+import case_study_hospital_management.common.constants.WorkingHoursConstants;
 import ss12_java_collection_framework.bai_tap.student_management.util.ConsoleColorUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -304,13 +306,16 @@ public class InputValidatorUtil {
                 return null;
             }
             if (time != null) {
-                LocalTime startWork = LocalTime.of(7, 0);
-                LocalTime endWork = LocalTime.of(18, 0);
+                int startHour = Objects.requireNonNull(DateUtil.parseTime(WorkingHoursConstants.STANDARD_START_TIME)).getHour();
+                int startMinute = Objects.requireNonNull(DateUtil.parseTime(WorkingHoursConstants.STANDARD_START_TIME)).getMinute();
+                int endHour = Objects.requireNonNull(DateUtil.parseTime(WorkingHoursConstants.STANDARD_END_TIME)).getHour();
+                int endMinute = Objects.requireNonNull(DateUtil.parseTime(WorkingHoursConstants.STANDARD_END_TIME)).getMinute();
+
+                LocalTime startWork = LocalTime.of(startHour, startMinute);
+                LocalTime endWork = LocalTime.of(endHour, endMinute);
 
                 if (time.isBefore(startWork) || time.isAfter(endWork)) {
-                    ConsoleColorUtil.printlnRed(
-                            String.format("%s phải trong giờ làm việc (07:00 - 18:00)!",
-                                    capitalize(displayName)));
+                    ConsoleColorUtil.printlnRed(String.format("%s phải trong giờ làm việc (%s - %s)!", capitalize(displayName), WorkingHoursConstants.STANDARD_START_TIME, WorkingHoursConstants.STANDARD_END_TIME));
                     continue;
                 }
                 return time;
@@ -319,7 +324,7 @@ public class InputValidatorUtil {
     }
 
     // Validate khoảng thời gian (startTime < endTime)
-    public static LocalTime inputTimeRange(String prompt, String displayName, LocalTime startTime, boolean allowEmpty) {
+    public static LocalTime inputTimeRange(String prompt, String displayName, LocalTime startTime, LocalTime endTime, boolean allowEmpty) {
         while (true) {
             LocalTime time = inputTime(prompt, displayName, allowEmpty);
             if (time == null && allowEmpty) {
@@ -327,10 +332,11 @@ public class InputValidatorUtil {
             }
             if (time != null && startTime != null) {
                 if (time.isBefore(startTime) || time.equals(startTime)) {
-                    ConsoleColorUtil.printlnRed(
-                            String.format("%s phải sau %s!",
-                                    capitalize(displayName),
-                                    startTime.format(ConfigurationConstants.TIME_FORMATTER)));
+                    ConsoleColorUtil.printlnRed(String.format("%s phải sau %s!", capitalize(displayName), startTime.format(ConfigurationConstants.TIME_FORMATTER)));
+                    continue;
+                }
+                if (time.isAfter(endTime)) {
+                    ConsoleColorUtil.printlnRed(String.format("%s phải trước %s!", capitalize(displayName), endTime.format(ConfigurationConstants.TIME_FORMATTER)));
                     continue;
                 }
                 return time;

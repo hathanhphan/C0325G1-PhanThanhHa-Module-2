@@ -1,17 +1,15 @@
 package case_study_hospital_management.view;
 
 import case_study_hospital_management.common.constants.ConfigurationConstants;
-import case_study_hospital_management.common.enums.BloodType;
+import case_study_hospital_management.common.constants.WorkingHoursConstants;
 import case_study_hospital_management.common.enums.DoctorSpecialization;
 import case_study_hospital_management.entity.DoctorEntity;
-import case_study_hospital_management.entity.PatientEntity;
 import case_study_hospital_management.util.ConsoleUtil;
 import case_study_hospital_management.util.DateUtil;
 import case_study_hospital_management.util.InputValidatorUtil;
 import case_study_hospital_management.util.PersonHelper;
 import ss12_java_collection_framework.bai_tap.student_management.util.ConsoleColorUtil;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Scanner;
@@ -84,9 +82,9 @@ public class DoctorView {
         int maxWorkingHoursLength = workingHours.length();
         int maxConsultationFeeLength = consultationFeeLabel.length();
         for (DoctorEntity doctor : doctors) {
-            maxIdLength = Math.max(maxIdLength, String.valueOf(doctor.getId()).length());
+            maxIdLength = Math.max(maxIdLength, doctor.getId().length());
             maxFullNameLength = Math.max(maxFullNameLength, doctor.getFullName().length());
-            maxGenderLength = Math.max(maxGenderLength, String.valueOf(doctor.getGender()).length());
+            maxGenderLength = Math.max(maxGenderLength, PersonHelper.getGenderDisplay(doctor.getGender()).length());
             maxPhoneNumberLength = Math.max(maxPhoneNumberLength, doctor.getPhoneNumber().length());
             maxSpecLength = Math.max(maxSpecLength, doctor.getSpecialization().getDisplayName().length());
             maxEmailLength = Math.max(maxEmailLength, doctor.getEmail().length());
@@ -191,7 +189,7 @@ public class DoctorView {
         LocalTime startTime = InputValidatorUtil.inputWorkingTime("🕐 Giờ bắt đầu ca (HH:mm): ", "giờ bắt đầu", isUpdate);
         LocalTime endTime = null;
         if (startTime != null) {
-            endTime = InputValidatorUtil.inputTimeRange("🕐 Giờ kết thúc ca (HH:mm): ", "giờ kết thúc", startTime, isUpdate);
+            endTime = InputValidatorUtil.inputTimeRange("🕐 Giờ kết thúc ca (HH:mm): ", "giờ kết thúc", startTime, DateUtil.parseTime(WorkingHoursConstants.STANDARD_END_TIME), isUpdate);
         }
         String workingHours = null;
         if (startTime != null && endTime != null) {
@@ -265,7 +263,7 @@ public class DoctorView {
 
     public void displayDetailMenu() {
         System.out.println("✏\uFE0F 1. Cập nhật thông tin");
-        System.out.println("\uD83D\uDDD1\uFE0F 2. Xoá bệnh nhân");
+        System.out.println("\uD83D\uDDD1\uFE0F 2. Xoá bác sĩ");
         System.out.println("\uD83D\uDD19 0. Trở về");
     }
 }

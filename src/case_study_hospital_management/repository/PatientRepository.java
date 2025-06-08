@@ -8,6 +8,7 @@ import java.util.Map;
 public interface PatientRepository extends IRepository<PatientEntity> {
     List<PatientEntity> findByName(String name);
     List<PatientEntity> findByPhoneNumber(String phoneNumber);
+    List<PatientEntity> findByKeyword(String keyword);
     Map<String, Integer> statisticByAge();
     Map<String, Integer> statisticByGender();
     Map<String, Integer> statisticByBloodType();

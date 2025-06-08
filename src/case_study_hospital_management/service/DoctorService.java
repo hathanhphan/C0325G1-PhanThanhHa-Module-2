@@ -13,4 +13,5 @@ public interface DoctorService extends IService<DoctorEntity> {
     List<DoctorEntity> findBySpecialization(DoctorSpecialization doctorSpecialization);
     List<DoctorEntity> findByYearOfExperience(int numberOfYear);
     List<DoctorEntity> findByPhoneNumber(String phoneNumber);
+    List<DoctorEntity> findByKeyword(String keyword);
 }

@@ -30,7 +30,16 @@ public enum AppointmentStatus {
                 return status;
             }
         }
-        return UNKNOWN;
+        throw new IllegalArgumentException();
+    }
+
+    public static AppointmentStatus fromDisplayName(String displayName) {
+        for (AppointmentStatus status : values()) {
+            if (status.displayName.equalsIgnoreCase(displayName)) {
+                return status;
+            }
+        }
+        throw new IllegalArgumentException();
     }
 
     public boolean isActive() {

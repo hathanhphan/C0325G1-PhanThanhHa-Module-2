@@ -1,0 +1,13 @@
+package case_study_hospital_management.repository;
+
+import case_study_hospital_management.entity.AppointmentEntity;
+import case_study_hospital_management.entity.DoctorEntity;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+
+public interface AppointmentRepository extends IRepository<AppointmentEntity> {
+    List<AppointmentEntity> findByDoctorAndDate(String doctorId, LocalDate appointmentDate);
+    Map<String, Boolean> findEmptyAppointmentsByDoctorAndDate(List<AppointmentEntity> appointments, DoctorEntity doctor);
+}

@@ -47,7 +47,7 @@ public class CSVUtil{
     }
 
     public static String[] parseCsvLine(String csvLine) {
-        return csvLine.split(",");
+        return csvLine.split(",", -1);
     }
 
     public static String escapeCSV(String value) {

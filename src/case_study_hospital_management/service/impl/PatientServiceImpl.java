@@ -44,6 +44,11 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public List<PatientEntity> findByKeyword(String keyword) {
+        return patientRepository.findByKeyword(keyword);
+    }
+
+    @Override
     public List<PatientEntity> getAll() {
         return patientRepository.findAll().stream().filter(p -> !p.getDeleted()).toList();
     }

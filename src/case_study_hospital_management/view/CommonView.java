@@ -113,4 +113,9 @@ public class CommonView {
             }
         }
     }
+
+    public static void displayContinueAction() {
+        System.out.print("Nhấn phím bất kí để tiếp tục...");
+        sc.nextLine();
+    }
 }

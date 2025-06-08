@@ -10,6 +10,7 @@ public class HospitalController {
 
     private static final PatientController patientController = PatientController.getInstance();
     private static final DoctorController doctorController = DoctorController.getInstance();
+    private static final AppointmentController appointmentController = AppointmentController.getInstance();
 
     public static void main(String[] args) {
         displayMenu();
@@ -32,7 +33,7 @@ public class HospitalController {
                     doctorController.displayMenu();
                     break;
                 case MainMenuConstants.APPOINTMENT_MANAGEMENT:
-                    System.out.println("Hehe");
+                    appointmentController.displayMenu();
                     break;
                 case MainMenuConstants.EXIT:
                     ConsoleColorUtil.printlnYellow("Kết thúc chương trình...");

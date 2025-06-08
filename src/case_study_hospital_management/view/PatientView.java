@@ -82,9 +82,9 @@ public class PatientView {
         int maxAllergiesLength = allergiesLabel.length();
         int maxRegistrationDateLength = registrationDateLabel.length();
         for (PatientEntity patient : patients) {
-            maxIdLength = Math.max(maxIdLength, String.valueOf(patient.getId()).length());
+            maxIdLength = Math.max(maxIdLength, patient.getId().length());
             maxFullNameLength = Math.max(maxFullNameLength, patient.getFullName().length());
-            maxGenderLength = Math.max(maxGenderLength, String.valueOf(patient.getGender()).length());
+            maxGenderLength = Math.max(maxGenderLength, PersonHelper.getGenderDisplay(patient.getGender()).length());
             maxPhoneNumberLength = Math.max(maxPhoneNumberLength, patient.getPhoneNumber().length());
             maxDobLength = Math.max(maxDobLength, patient.getDob().toString().length());
             maxAddressLength = Math.max(maxAddressLength, patient.getAddress().length());
