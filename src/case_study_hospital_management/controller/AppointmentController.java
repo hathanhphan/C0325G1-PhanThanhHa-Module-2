@@ -2,7 +2,7 @@ package case_study_hospital_management.controller;
 
 import case_study_hospital_management.common.constants.AppointmentMenuConstants;
 import case_study_hospital_management.common.constants.DoctorMenuConstants;
-import case_study_hospital_management.common.constants.PatientMenuConstants;
+import case_study_hospital_management.common.enums.AppointmentStatus;
 import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.DoctorEntity;
 import case_study_hospital_management.entity.PatientEntity;
@@ -13,7 +13,7 @@ import case_study_hospital_management.service.impl.AppointmentServiceImpl;
 import case_study_hospital_management.service.impl.DoctorServiceImpl;
 import case_study_hospital_management.service.impl.PatientServiceImpl;
 import case_study_hospital_management.util.ConsoleUtil;
-import case_study_hospital_management.util.DateUtil;
+import case_study_hospital_management.util.InputValidatorUtil;
 import case_study_hospital_management.view.AppointmentView;
 import case_study_hospital_management.view.CommonView;
 import case_study_hospital_management.view.DoctorView;
@@ -53,11 +53,11 @@ public class AppointmentController {
             shouldShowMenu = true;
             switch (choice) {
                 case AppointmentMenuConstants.ADD_APPOINTMENT:
-                    addAppointment();
+                    addAppointment(null, null);
                     CommonView.displayContinueAction();
                     break;
                 case AppointmentMenuConstants.SEARCH_APPOINTMENT:
-                    //searchDoctor();
+                    searchAppointment();
                     break;
                 case AppointmentMenuConstants.LIST_APPOINTMENT:
                     displayAppointmentList();
@@ -86,14 +86,18 @@ public class AppointmentController {
         }
     }
 
-    private void addAppointment() {
-        PatientEntity patient = selectPatient();
+    public void addAppointment(PatientEntity patient, DoctorEntity doctor) {
         if (patient == null) {
-            return;
+            patient = selectPatient();
+            if (patient == null) {
+                return;
+            }
         }
-        DoctorEntity doctor = selectDoctor();
         if (doctor == null) {
-            return;
+            doctor = selectDoctor();
+            if (doctor == null) {
+                return;
+            }
         }
         LocalDate appointmentDate = appointmentView.selectAppointmentDate();
         List<AppointmentEntity> foundAppointments = appointmentService.findByDoctorAndDate(doctor.getId(), appointmentDate);
@@ -216,7 +220,7 @@ public class AppointmentController {
         }
     }
 
-    private void displayAppointmentList() {
+    public void displayAppointmentList() {
         List<AppointmentEntity> appointments = appointmentService.getAll();
         appointmentView.display(appointments);
         displaySelectAppointment(appointments);
@@ -235,6 +239,10 @@ public class AppointmentController {
     }
 
     private void displayDetailMenu(AppointmentEntity appointment) {
+        if (appointment.getStatus().equals(AppointmentStatus.CANCELLED)) {
+            CommonView.displayContinueAction();
+            return;
+        }
         int choice;
         appointmentView.displayDetailMenu();
         while (true) {
@@ -250,6 +258,108 @@ public class AppointmentController {
                     return;
                 default:
                     ConsoleUtil.printlnYellow("Không có tính năng phù hợp. Vui lòng chọn lại.");
+            }
+        }
+    }
+
+    public void displaySelectGroupAppointmentsByDate(List<AppointmentEntity> appointments) {
+        List<String> idsCanSelect = appointments.stream().map(AppointmentEntity::getId).toList();
+        System.out.println("Nhập [Mã lịch hẹn] tương ứng để tương tác chi tiết với lịch hẹn. Hoặc [ENTER] để tiếp tục...");
+        String id;
+        while (true) {
+            id = CommonView.inputStringKeyword("Lựa chọn của bạn: ");
+            if (id.isEmpty()) {
+                return;
+            }
+            AppointmentEntity appointment = appointmentService.findById(id);
+            if (appointment != null && idsCanSelect.contains(id)) {
+                appointmentView.showDetail(appointment);
+                return;
+            } else {
+                ConsoleUtil.printlnYellow("Cần nhập đúng mã lịch hẹn có trên danh sách hiện tại. Vui lòng nhập lại hoặc [ENTER] để tiếp tục...");
+            }
+        }
+    }
+
+    private void searchAppointment() {
+        int choice;
+        appointmentView.displaySearchMenu();
+        while (true) {
+            choice = CommonView.inputFeatureSelection();
+            switch (choice) {
+                case AppointmentMenuConstants.SEARCH_APPOINTMENT_BY_ID:
+                    searchAppointmentById();
+                    return;
+                case AppointmentMenuConstants.SEARCH_APPOINTMENT_BY_PATIENT:
+                    searchAppointmentByPatient();
+                    return;
+                case AppointmentMenuConstants.SEARCH_APPOINTMENT_BY_DOCTOR:
+                    searchAppointmentByDoctor();
+                    return;
+                case AppointmentMenuConstants.SEARCH_APPOINTMENT_BY_STATUS:
+                    searchAppointmentByStatus();
+                    return;
+                case AppointmentMenuConstants.SEARCH_APPOINTMENT_BY_DATE:
+                    searchAppointmentByDate();
+                    return;
+                case AppointmentMenuConstants.RETURN:
+                    return;
+                default:
+                    ConsoleUtil.printlnYellow("Không có tính năng phù hợp. Vui lòng chọn lại.");
+            }
+        }
+    }
+
+    private void searchAppointmentById() {
+        String id = CommonView.inputStringKeyword("Nhập mã lịch hẹn cần tìm: ");
+        AppointmentEntity appointment = appointmentService.findById(id);
+        if (appointment != null) {
+            ConsoleUtil.printlnGreen("Tìm thấy lịch hẹn có mã tương ứng.");
+            appointmentView.showDetail(appointment);
+            displayDetailMenu(appointment);
+        } else {
+            ConsoleUtil.printlnYellow("Không tìm thấy lịch hẹn nào có mã " + id);
+        }
+    }
+
+    private void searchAppointmentByPatient() {
+        List<AppointmentEntity> foundAppointments;
+        String keyword = CommonView.inputStringKeyword("Nhập mã, tên hoặc số điện thoại của bệnh nhân cần tìm kiếm lịch hẹn: ");
+        foundAppointments = appointmentService.findByKeywordOfPatient(keyword);
+        displaySearchResult(foundAppointments);
+    }
+
+    private void searchAppointmentByDoctor() {
+        List<AppointmentEntity> foundAppointments;
+        String keyword = CommonView.inputStringKeyword("Nhập mã, tên hoặc số điện thoại của bác sĩ cần tìm kiếm lịch hẹn: ");
+        foundAppointments = appointmentService.findByKeywordOfDoctor(keyword);
+        displaySearchResult(foundAppointments);
+    }
+
+    private void searchAppointmentByStatus() {
+        List<AppointmentEntity> foundAppointments;
+        AppointmentStatus status = appointmentView.selectAppointmentStatus("Chọn trạng thái lịch hẹn cần tìm: ", false);
+        foundAppointments = appointmentService.findByStatus(status);
+        displaySearchResult(foundAppointments);
+    }
+
+    private void searchAppointmentByDate() {
+        List<AppointmentEntity> foundAppointments;
+        LocalDate date = InputValidatorUtil.inputDate("Chọn ngày cần tìm lịch hẹn: ", "ngày cần tìm", false);
+        foundAppointments = appointmentService.findByDate(date);
+        displaySearchResult(foundAppointments);
+    }
+
+    private void displaySearchResult(List<AppointmentEntity> appointments) {
+        if (appointments.isEmpty()) {
+            ConsoleUtil.printlnYellow("Không tìm thấy lịch hẹn nào tương ứng từ khoá trên.");
+        } else {
+            if (appointments.size() == 1) {
+                appointmentView.showDetail(appointments.get(0));
+                displayDetailMenu(appointments.get(0));
+            } else {
+                appointmentView.display(appointments);
+                displaySelectAppointment(appointments);
             }
         }
     }

@@ -1,6 +1,7 @@
 package case_study_hospital_management.controller;
 
 import case_study_hospital_management.common.constants.PatientMenuConstants;
+import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.PatientEntity;
 import case_study_hospital_management.service.PatientService;
 import case_study_hospital_management.service.impl.PatientServiceImpl;
@@ -9,12 +10,12 @@ import case_study_hospital_management.view.CommonView;
 import case_study_hospital_management.view.PatientView;
 
 import java.util.List;
-import java.util.Scanner;
+import java.util.Map;
 
 public class PatientController {
     private static final PatientService patientService = PatientServiceImpl.getInstance();
     private static final PatientView patientView = PatientView.getInstance();
-    private static final Scanner sc = new Scanner(System.in);
+    private static final AppointmentController appointmentController = AppointmentController.getInstance();
     private static PatientController instance;
     private PatientController() {}
 
@@ -184,11 +185,29 @@ public class PatientController {
                 case PatientMenuConstants.DELETE_PATIENT_IN_DETAIL:
                     deletePatient(patient);
                     return;
+                case PatientMenuConstants.ADD_APPOINTMENT_IN_DETAIL:
+                    appointmentController.addAppointment(patient, null);
+                    return;
+                case PatientMenuConstants.VIEW_APPOINTMENT_IN_DETAIL:
+                    displayAppointmentsOfPatient(patient);
+                    CommonView.displayContinueAction();
+                    return;
                 case PatientMenuConstants.RETURN:
                     return;
                 default:
                     ConsoleUtil.printlnYellow("Không có tính năng phù hợp. Vui lòng chọn lại.");
             }
+        }
+    }
+
+    private void displayAppointmentsOfPatient(PatientEntity patient) {
+        List<AppointmentEntity> appointments = patientService.findAllAppointmentByPatientId(patient.getId());
+        Map<String, List<AppointmentEntity>> groupAppointmentsByDate = patientService.groupAppointmentByDate(appointments);
+        if (groupAppointmentsByDate.isEmpty()) {
+            ConsoleUtil.printlnRed("Bệnh nhân này chưa có lịch hẹn nào!");
+        } else {
+            CommonView.displayGroupByAppointmentList(groupAppointmentsByDate);
+            appointmentController.displaySelectGroupAppointmentsByDate(appointments);
         }
     }
 

@@ -55,4 +55,5 @@ A000054,P000015,D000015,12/06/2025,10:00-10:30,SCHEDULED,Kiểm tra MRI lại,L�
 A000055,P000009,D000009,08/06/2025,16:00-16:30,RESCHEDULED,Khám tai mũi họng,Đã dời lịch sang 13/06/2025,A000055,A000056,Bệnh nhân yêu cầu dời,false
 A000056,P000009,D000009,13/06/2025,16:00-16:30,SCHEDULED,Khám tai mũi họng,Lịch dời từ 08/06/2025,A000055,,,false
 A000057,P000001,D000009,08/06/2025,08:30-09:00,SCHEDULED,Nhức tai,Nổi mẫn đỏ,,,,false
-A000058,P000001,D000009,08/06/2025,09:00-09:30,SCHEDULED,Nhức tai,hình như là nổi mụn nhọt,,,,false
+A000058,P000001,D000009,08/06/2025,09:00-09:30,CANCELLED,Nhức tai,hình như là nổi mụn nhọt,,,,false
+A000059,P000005,D000017,08/06/2025,07:00-07:30,SCHEDULED,skmdajhgsdfg,sdfgsdfg,,,,false

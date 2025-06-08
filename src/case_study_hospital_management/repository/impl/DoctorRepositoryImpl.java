@@ -4,7 +4,7 @@ import case_study_hospital_management.common.constants.ConfigurationConstants;
 import case_study_hospital_management.common.enums.DoctorSpecialization;
 import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.DoctorEntity;
-import case_study_hospital_management.entity.PatientEntity;
+import case_study_hospital_management.repository.AppointmentRepository;
 import case_study_hospital_management.repository.DoctorRepository;
 import case_study_hospital_management.util.CSVUtil;
 
@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DoctorRepositoryImpl implements DoctorRepository {
+    private static final AppointmentRepository appointmentRepository = AppointmentRepositoryImpl.getInstance();
     private static DoctorRepositoryImpl instance;
     private final String fileName;
 
@@ -37,9 +38,8 @@ public class DoctorRepositoryImpl implements DoctorRepository {
     }
 
     @Override
-    public List<AppointmentEntity> findALlWorkSchedule(String id) {
-        List<AppointmentEntity> appointments = new ArrayList<>();
-        return appointments.stream().filter(a -> a.getDoctorId().equals(id)).toList();
+    public List<AppointmentEntity> findAllAppointmentByDoctorId(String id) {
+        return appointmentRepository.findAllAppointmentByDoctorId(id);
     }
 
     @Override

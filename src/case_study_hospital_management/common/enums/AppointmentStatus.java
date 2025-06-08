@@ -42,6 +42,15 @@ public enum AppointmentStatus {
         throw new IllegalArgumentException();
     }
 
+    public static AppointmentStatus from(String value) {
+        for (AppointmentStatus status : values()) {
+            if (status.displayName.equalsIgnoreCase(value) || status.code.equalsIgnoreCase(value)) {
+                return status;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
     public boolean isActive() {
         return this == SCHEDULED || this == RESCHEDULED;
     }

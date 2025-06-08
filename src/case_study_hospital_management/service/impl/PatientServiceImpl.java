@@ -1,12 +1,17 @@
 package case_study_hospital_management.service.impl;
 
+import case_study_hospital_management.common.enums.DayOfWeekInVietnamese;
+import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.PatientEntity;
 import case_study_hospital_management.repository.PatientRepository;
 import case_study_hospital_management.repository.impl.PatientRepositoryImpl;
 import case_study_hospital_management.service.PatientService;
+import case_study_hospital_management.util.ConsoleUtil;
+import case_study_hospital_management.util.DateUtil;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,6 +51,39 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public List<PatientEntity> findByKeyword(String keyword) {
         return patientRepository.findByKeyword(keyword);
+    }
+
+    @Override
+    public List<AppointmentEntity> findAllAppointmentByPatientId(String id) {
+        return patientRepository.findAllAppointmentByPatientId(id);
+    }
+
+    @Override
+    public Map<String, List<AppointmentEntity>> groupAppointmentByDate(List<AppointmentEntity> appointments) {
+        Map<String, List<AppointmentEntity>> groupAppointmentsByDate = new LinkedHashMap<>();
+        String dayOfWeek = "";
+        String currentDayOfWeek;
+        String key = "";
+        List<AppointmentEntity> groups;
+        for (AppointmentEntity appointment : appointments) {
+            currentDayOfWeek = DayOfWeekInVietnamese.fromCode(appointment.getAppointmentDate().getDayOfWeek().toString()).getDisplayName();
+            if (dayOfWeek.isEmpty() || !dayOfWeek.equalsIgnoreCase(currentDayOfWeek)) {
+                dayOfWeek = currentDayOfWeek;
+                if (appointment.getAppointmentDate().equals(LocalDate.now())) {
+                    key = String.format("%s, %s (hôm nay): ", dayOfWeek, DateUtil.formatDate(appointment.getAppointmentDate()));
+                } else {
+                    key = String.format("%s, %s: ", dayOfWeek, DateUtil.formatDate(appointment.getAppointmentDate()));
+                }
+            }
+            if (groupAppointmentsByDate.containsKey(key)) {
+                groupAppointmentsByDate.get(key).add(appointment);
+            } else {
+                groups = new ArrayList<>();
+                groups.add(appointment);
+                groupAppointmentsByDate.put(key, groups);
+            }
+        }
+        return groupAppointmentsByDate;
     }
 
     @Override

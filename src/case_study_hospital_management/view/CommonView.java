@@ -1,13 +1,17 @@
 package case_study_hospital_management.view;
 
 import case_study_hospital_management.common.constants.ConfigurationConstants;
+import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.util.ConsoleUtil;
 import ss12_java_collection_framework.bai_tap.student_management.util.ConsoleColorUtil;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class CommonView {
+    private static final AppointmentView appointmentView = AppointmentView.getInstance();
+
     private static final Scanner sc = new Scanner(System.in);
 
     public static void displayTip() {
@@ -117,5 +121,13 @@ public class CommonView {
     public static void displayContinueAction() {
         System.out.print("Nhấn phím bất kí để tiếp tục...");
         sc.nextLine();
+    }
+
+    public static void displayGroupByAppointmentList(Map<String, List<AppointmentEntity>> groupAppointmentsByDate) {
+        for(Map.Entry<String, List<AppointmentEntity>> group : groupAppointmentsByDate.entrySet()) {
+            ConsoleUtil.printlnBold(group.getKey());
+            appointmentView.display(group.getValue(), "");
+            System.out.println();
+        }
     }
 }

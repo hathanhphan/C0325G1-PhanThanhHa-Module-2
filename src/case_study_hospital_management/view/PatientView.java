@@ -242,6 +242,8 @@ public class PatientView {
     public void displayDetailMenu() {
         System.out.println("✏\uFE0F 1. Cập nhật thông tin");
         System.out.println("\uD83D\uDDD1\uFE0F 2. Xoá bệnh nhân");
+        System.out.println("➕ 3. Thêm lịch hẹn mới");
+        System.out.println("\uD83D\uDCC5 4. Xem lịch hẹn của bệnh nhân");
         System.out.println("\uD83D\uDD19 0. Trở về");
     }
 

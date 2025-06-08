@@ -1,7 +1,6 @@
 package case_study_hospital_management.view;
 
 import case_study_hospital_management.common.constants.ConfigurationConstants;
-import case_study_hospital_management.common.constants.WorkingHoursConstants;
 import case_study_hospital_management.common.enums.AppointmentStatus;
 import case_study_hospital_management.common.enums.DoctorSpecialization;
 import case_study_hospital_management.entity.AppointmentEntity;
@@ -54,8 +53,10 @@ public class AppointmentView {
     }
 
     public void display(List<AppointmentEntity> appointments, String title) {
-        System.out.println();
-        System.out.println("=".repeat(title.length() / 2) + title + "=".repeat(title.length() / 2));
+        if (!title.isEmpty()) {
+            System.out.println();
+            System.out.println("=".repeat(title.length() / 2) + title + "=".repeat(title.length() / 2));
+        }
         displayAtTable(appointments);
     }
 
@@ -206,7 +207,7 @@ public class AppointmentView {
         int choice;
         while (true) {
             try {
-                System.out.print("⏰ Thời gian: ");
+                System.out.print("⏰ Thời gian (Chọn số tương ứng lịch): ");
                 choice = Integer.parseInt(sc.nextLine());
                 if (!indexesCanChoose.containsKey(choice)) {
                     ConsoleColorUtil.printlnRed("Bạn nhập 1 số vượt ngoài lựa chọn hoặc thời gian đó đã có người đặt. Vui lòng nhập lại");
@@ -256,6 +257,52 @@ public class AppointmentView {
                 else ConsoleColorUtil.printlnRed("Bạn chọn chức năng không hợp lệ. Vui lòng chọn lại.");
             } catch (NumberFormatException e) {
                 ConsoleColorUtil.printlnRed("Bạn chọn chức năng không hợp lệ. Vui lòng chọn lại.");
+            }
+        }
+    }
+
+    public void displaySearchMenu() {
+        System.out.println("\t\uD83C\uDD94 1. Tìm theo mã lịch hẹn");
+        System.out.println("\t\uD83D\uDC64 2. Tìm theo bệnh nhân (mã, tên hoặc số điện thoại)");
+        System.out.println("\t\uD83D\uDC68\u200D⚕\uFE0F 3. Tìm theo bác sĩ (mã, tên hoặc số điện thoại)");
+        System.out.println("\t\uD83D\uDD39 4. Tìm theo trạng thái");
+        System.out.println("\t\uD83D\uDCC5 5. Tìm theo ngày");
+    }
+
+    public AppointmentStatus selectAppointmentStatus(String message, boolean allowEmpty) {
+        String status;
+        System.out.println(message);
+        int index = 1;
+        int breakLineIndex = 3;
+        int maxCodeLength = 0;
+        int maxDisplayNameLength = 0;
+        int statusListLength = AppointmentStatus.values().length;
+        for (AppointmentStatus as : AppointmentStatus.values()) {
+            if (as.getCode().length() > maxCodeLength && as != AppointmentStatus.UNKNOWN) {
+                maxCodeLength = as.getCode().length();
+            }
+            if (as.getDisplayName().length() > maxDisplayNameLength) {
+                maxDisplayNameLength = as.getDisplayName().length();
+            }
+        }
+        for (AppointmentStatus as : AppointmentStatus.values()) {
+            System.out.printf("%-30s", String.format("[%s] %s", as.getCode(), as.getDisplayName()));
+            if (index % breakLineIndex == 0 && index != statusListLength) {
+                System.out.println();
+            }
+            index++;
+        }
+        System.out.println();
+        while (true) {
+            try {
+                System.out.print("Nhập trạng thái tương ứng tương ứng (Có thể nhập đầy đủ tên hoặc mã): ");
+                status = sc.nextLine();
+                if (status.isEmpty() && allowEmpty) {
+                    return null;
+                }
+                return AppointmentStatus.from(status);
+            } catch (IllegalArgumentException e) {
+                ConsoleColorUtil.printlnRed("Vui lòng nhập 1 trạng thái hợp lệ.");
             }
         }
     }

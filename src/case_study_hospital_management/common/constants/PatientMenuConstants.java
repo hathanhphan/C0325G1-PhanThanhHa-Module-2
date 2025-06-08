@@ -18,6 +18,8 @@ public class PatientMenuConstants {
     // Detail menu
     public static final int UPDATE_PATIENT_IN_DETAIL = 1;
     public static final int DELETE_PATIENT_IN_DETAIL = 2;
+    public static final int ADD_APPOINTMENT_IN_DETAIL = 3;
+    public static final int VIEW_APPOINTMENT_IN_DETAIL = 4;
 
     // Statistic menu
     public static final int STATISTIC_PATIENT_BY_AGE_GROUP = 1;

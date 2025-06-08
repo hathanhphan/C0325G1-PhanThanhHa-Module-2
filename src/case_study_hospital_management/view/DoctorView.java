@@ -3,6 +3,7 @@ package case_study_hospital_management.view;
 import case_study_hospital_management.common.constants.ConfigurationConstants;
 import case_study_hospital_management.common.constants.WorkingHoursConstants;
 import case_study_hospital_management.common.enums.DoctorSpecialization;
+import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.DoctorEntity;
 import case_study_hospital_management.util.ConsoleUtil;
 import case_study_hospital_management.util.DateUtil;
@@ -12,6 +13,7 @@ import ss12_java_collection_framework.bai_tap.student_management.util.ConsoleCol
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class DoctorView {
@@ -229,7 +231,7 @@ public class DoctorView {
             }
         }
         for (DoctorSpecialization spec : DoctorSpecialization.values()) {
-            System.out.printf("[%-" + maxCodeLength + "s] %-" + (maxDisplayNameLength + 5) + "s", spec.getCode(), spec.getDisplayName());
+            System.out.printf("%-30s", String.format("[%s] %s", spec.getCode(), spec.getDisplayName()));
             if (index % breakLineIndex == 0 && index != specListLength) {
                 System.out.println();
             }
@@ -264,6 +266,8 @@ public class DoctorView {
     public void displayDetailMenu() {
         System.out.println("✏\uFE0F 1. Cập nhật thông tin");
         System.out.println("\uD83D\uDDD1\uFE0F 2. Xoá bác sĩ");
+        System.out.println("➕ 3. Thêm lịch hẹn mới");
+        System.out.println("\uD83D\uDCC5 4. Xem lịch làm việc");
         System.out.println("\uD83D\uDD19 0. Trở về");
     }
 }

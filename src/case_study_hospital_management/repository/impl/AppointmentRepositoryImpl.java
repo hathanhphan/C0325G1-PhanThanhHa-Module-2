@@ -3,6 +3,7 @@ package case_study_hospital_management.repository.impl;
 import case_study_hospital_management.common.constants.ConfigurationConstants;
 import case_study_hospital_management.common.constants.WorkingHoursConstants;
 import case_study_hospital_management.common.enums.AppointmentStatus;
+import case_study_hospital_management.common.enums.DoctorSpecialization;
 import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.DoctorEntity;
 import case_study_hospital_management.repository.AppointmentRepository;
@@ -13,10 +14,8 @@ import case_study_hospital_management.util.DateUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class AppointmentRepositoryImpl implements AppointmentRepository {
 
@@ -144,10 +143,56 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
             startTime = startTime.plusMinutes(WorkingHoursConstants.STANDARD_TIME_PER_APPOINTMENT);
         }
         appointments.forEach(a -> {
-            if (appointmentsPerDay.containsKey(a.getAppointmentTime())) {
+            if (appointmentsPerDay.containsKey(a.getAppointmentTime()) && !a.getStatus().equals(AppointmentStatus.CANCELLED)) {
                 appointmentsPerDay.put(a.getAppointmentTime(), false);
             }
         });
         return appointmentsPerDay;
+    }
+
+    @Override
+    public List<AppointmentEntity> findAllAppointmentByDoctorId(String id) {
+        List<AppointmentEntity> appointments = getCurrentList();
+        return appointments.stream().filter(a -> a.getDoctorId().equals(id)).sorted(Comparator.comparing(AppointmentEntity::getAppointmentDate).reversed()).toList();
+    }
+
+    @Override
+    public List<AppointmentEntity> findAllAppointmentByPatientId(String id) {
+        List<AppointmentEntity> appointments = getCurrentList();
+        return appointments.stream().filter(a -> a.getPatientId().equals(id)).sorted(Comparator.comparing(AppointmentEntity::getAppointmentDate).reversed()).toList();
+    }
+
+    @Override
+    public List<AppointmentEntity> findByKeywordOfPatient(String keyword) {
+        List<AppointmentEntity> appointments = getCurrentList();
+        String finalKeyword = keyword.toLowerCase();
+        return appointments.stream().filter(
+                a -> a.getPatient().getId().toLowerCase().equals(keyword)
+                    || a.getPatient().getFullName().toLowerCase().contains(finalKeyword)
+                    || a.getPatient().getPhoneNumber().toLowerCase().contains(finalKeyword)
+        ).toList();
+    }
+
+    @Override
+    public List<AppointmentEntity> findByKeywordOfDoctor(String keyword) {
+        List<AppointmentEntity> appointments = getCurrentList();
+        String finalKeyword = keyword.toLowerCase();
+        return appointments.stream().filter(
+                a -> a.getDoctor().getId().toLowerCase().equals(keyword)
+                        || a.getDoctor().getFullName().toLowerCase().contains(finalKeyword)
+                        || a.getDoctor().getPhoneNumber().toLowerCase().contains(finalKeyword)
+        ).toList();
+    }
+
+    @Override
+    public List<AppointmentEntity> findByStatus(AppointmentStatus status) {
+        List<AppointmentEntity> appointments = getCurrentList();
+        return appointments.stream().filter(a -> a.getStatus().equals(status)).toList();
+    }
+
+    @Override
+    public List<AppointmentEntity> findByDate(LocalDate appointmentDate) {
+        List<AppointmentEntity> appointments = getCurrentList();
+        return appointments.stream().filter(a -> a.getAppointmentDate().equals(appointmentDate)).toList();
     }
 }

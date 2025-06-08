@@ -10,9 +10,9 @@ import java.util.Map;
 
 public interface DoctorRepository extends IRepository<DoctorEntity> {
     List<DoctorEntity> findByName(String name);
-    List<AppointmentEntity> findALlWorkSchedule(String id);
     List<DoctorEntity> findBySpecialization(DoctorSpecialization doctorSpecialization);
     List<DoctorEntity> findByYearOfExperience(int numberOfYear);
     List<DoctorEntity> findByPhoneNumber(String phoneNumber);
     List<DoctorEntity> findByKeyword(String keyword);
+    List<AppointmentEntity> findAllAppointmentByDoctorId(String id);
 }

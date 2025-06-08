@@ -2,7 +2,9 @@ package case_study_hospital_management.repository.impl;
 
 import case_study_hospital_management.common.constants.ConfigurationConstants;
 import case_study_hospital_management.common.enums.BloodType;
+import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.PatientEntity;
+import case_study_hospital_management.repository.AppointmentRepository;
 import case_study_hospital_management.repository.PatientRepository;
 import case_study_hospital_management.util.PersonHelper;
 import case_study_hospital_management.util.CSVUtil;
@@ -15,6 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PatientRepositoryImpl implements PatientRepository {
+    private static final AppointmentRepository appointmentRepository = AppointmentRepositoryImpl.getInstance();
     private static PatientRepositoryImpl instance;
     private final String fileName;
 
@@ -173,5 +176,10 @@ public class PatientRepositoryImpl implements PatientRepository {
                         Integer::sum
                 ));
 
+    }
+
+    @Override
+    public List<AppointmentEntity> findAllAppointmentByPatientId(String id) {
+        return appointmentRepository.findAllAppointmentByPatientId(id);
     }
 }

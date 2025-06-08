@@ -1,5 +1,6 @@
 package case_study_hospital_management.service;
 
+import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.PatientEntity;
 import case_study_hospital_management.repository.IRepository;
 
@@ -14,4 +15,6 @@ public interface PatientService extends IService<PatientEntity> {
     Map<String, Integer> statisticByAge();
     Map<String, Integer> statisticByGender();
     Map<String, Integer> statisticByBloodType();
+    List<AppointmentEntity> findAllAppointmentByPatientId(String id);
+    Map<String, List<AppointmentEntity>> groupAppointmentByDate(List<AppointmentEntity> appointments);
 }

@@ -12,10 +12,11 @@ public class AppointmentMenuConstants {
     public static final int RETURN = 0;
 
     // Search menu
-    public static final int SEARCH_APPOINTMENT_BY_NAME = 1;
-    public static final int SEARCH_APPOINTMENT_BY_SPEC = 2;
-    public static final int SEARCH_APPOINTMENT_BY_PHONE_NUMBER = 3;
-    public static final int SEARCH_APPOINTMENT_BY_YEAR_EXP = 4;
+    public static final int SEARCH_APPOINTMENT_BY_ID = 1;
+    public static final int SEARCH_APPOINTMENT_BY_PATIENT = 2;
+    public static final int SEARCH_APPOINTMENT_BY_DOCTOR = 3;
+    public static final int SEARCH_APPOINTMENT_BY_STATUS = 4;
+    public static final int SEARCH_APPOINTMENT_BY_DATE = 5;
 
     // Detail menu
     public static final int UPDATE_APPOINTMENT_IN_DETAIL = 1;

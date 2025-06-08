@@ -2,6 +2,7 @@ package case_study_hospital_management.controller;
 
 import case_study_hospital_management.common.constants.DoctorMenuConstants;
 import case_study_hospital_management.common.enums.DoctorSpecialization;
+import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.DoctorEntity;
 import case_study_hospital_management.service.DoctorService;
 import case_study_hospital_management.service.impl.DoctorServiceImpl;
@@ -11,12 +12,12 @@ import case_study_hospital_management.view.CommonView;
 import case_study_hospital_management.view.DoctorView;
 
 import java.util.List;
-import java.util.Scanner;
+import java.util.Map;
 
 public class DoctorController {
     private static final DoctorService doctorService = DoctorServiceImpl.getInstance();
     private static final DoctorView doctorView = DoctorView.getInstance();
-    private static final Scanner sc = new Scanner(System.in);
+    private static final AppointmentController appointmentController = AppointmentController.getInstance();
     private static DoctorController instance;
     private DoctorController() {}
 
@@ -192,9 +193,27 @@ public class DoctorController {
                     return;
                 case DoctorMenuConstants.RETURN:
                     return;
+                case DoctorMenuConstants.ADD_APPOINTMENT_IN_DETAIL:
+                    appointmentController.addAppointment(null, doctor);
+                    return;
+                case DoctorMenuConstants.VIEW_APPOINTMENT_IN_DETAIL:
+                    displayAppointmentsOfDoctor(doctor);
+                    CommonView.displayContinueAction();
+                    return;
                 default:
                     ConsoleUtil.printlnYellow("Không có tính năng phù hợp. Vui lòng chọn lại.");
             }
+        }
+    }
+
+    private void displayAppointmentsOfDoctor(DoctorEntity doctor) {
+        List<AppointmentEntity> appointments = doctorService.findAllAppointmentByDoctorId(doctor.getId());
+        Map<String, List<AppointmentEntity>> groupAppointmentsByDate = doctorService.groupAppointmentByDate(appointments);
+        if (groupAppointmentsByDate.isEmpty()) {
+            ConsoleUtil.printlnRed("Bác sĩ này chưa có lịch hẹn nào!");
+        } else {
+            CommonView.displayGroupByAppointmentList(groupAppointmentsByDate);
+            appointmentController.displaySelectGroupAppointmentsByDate(appointments);
         }
     }
 

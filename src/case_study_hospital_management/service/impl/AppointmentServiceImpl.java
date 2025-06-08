@@ -1,5 +1,6 @@
 package case_study_hospital_management.service.impl;
 
+import case_study_hospital_management.common.enums.AppointmentStatus;
 import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.DoctorEntity;
 import case_study_hospital_management.repository.AppointmentRepository;
@@ -66,5 +67,35 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public Map<String, Boolean> findEmptyAppointmentsByDoctorAndDate(List<AppointmentEntity> appointments, DoctorEntity doctor) {
         return appointmentRepository.findEmptyAppointmentsByDoctorAndDate(appointments, doctor);
+    }
+
+    @Override
+    public List<AppointmentEntity> findAllAppointmentByDoctorId(String id) {
+        return appointmentRepository.findAllAppointmentByDoctorId(id);
+    }
+
+    @Override
+    public List<AppointmentEntity> findAllAppointmentByPatientId(String id) {
+        return appointmentRepository.findAllAppointmentByPatientId(id);
+    }
+
+    @Override
+    public List<AppointmentEntity> findByKeywordOfPatient(String keyword) {
+        return appointmentRepository.findByKeywordOfPatient(keyword);
+    }
+
+    @Override
+    public List<AppointmentEntity> findByKeywordOfDoctor(String keyword) {
+        return appointmentRepository.findByKeywordOfDoctor(keyword);
+    }
+
+    @Override
+    public List<AppointmentEntity> findByStatus(AppointmentStatus status) {
+        return appointmentRepository.findByStatus(status);
+    }
+
+    @Override
+    public List<AppointmentEntity> findByDate(LocalDate appointmentDate) {
+        return appointmentRepository.findByDate(appointmentDate);
     }
 }
