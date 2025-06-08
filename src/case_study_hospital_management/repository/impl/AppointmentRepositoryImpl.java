@@ -105,6 +105,8 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
         List<AppointmentEntity> appointments = findAll();
         int foundIndex = findIndexById(appointment.getId());
         if (foundIndex > -1) {
+            appointment.setPatient(patientRepository.findById(appointment.getPatientId()));
+            appointment.setDoctor(doctorRepository.findById(appointment.getDoctorId()));
             appointments.set(foundIndex, appointment);
             return CSVUtil.writeCSVFile(fileName, appointments);
         }
@@ -194,5 +196,12 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
     public List<AppointmentEntity> findByDate(LocalDate appointmentDate) {
         List<AppointmentEntity> appointments = getCurrentList();
         return appointments.stream().filter(a -> a.getAppointmentDate().equals(appointmentDate)).toList();
+    }
+
+    @Override
+    public boolean reschedule(AppointmentEntity appointment, AppointmentEntity rescheduleAppointment) {
+        rescheduleAppointment.setPatient(patientRepository.findById(rescheduleAppointment.getPatientId()));
+        rescheduleAppointment.setDoctor(doctorRepository.findById(rescheduleAppointment.getDoctorId()));
+        return update(appointment) && save(rescheduleAppointment);
     }
 }

@@ -1,8 +1,8 @@
 package case_study_hospital_management.controller;
 
 import case_study_hospital_management.common.constants.AppointmentMenuConstants;
-import case_study_hospital_management.common.constants.DoctorMenuConstants;
 import case_study_hospital_management.common.enums.AppointmentStatus;
+import case_study_hospital_management.common.enums.DayOfWeekInVietnamese;
 import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.DoctorEntity;
 import case_study_hospital_management.entity.PatientEntity;
@@ -13,6 +13,7 @@ import case_study_hospital_management.service.impl.AppointmentServiceImpl;
 import case_study_hospital_management.service.impl.DoctorServiceImpl;
 import case_study_hospital_management.service.impl.PatientServiceImpl;
 import case_study_hospital_management.util.ConsoleUtil;
+import case_study_hospital_management.util.DateUtil;
 import case_study_hospital_management.util.InputValidatorUtil;
 import case_study_hospital_management.view.AppointmentView;
 import case_study_hospital_management.view.CommonView;
@@ -63,18 +64,18 @@ public class AppointmentController {
                     displayAppointmentList();
                     break;
                 case AppointmentMenuConstants.UPDATE_APPOINTMENT:
-                    //updateDoctor();
+                    updateAppointment();
                     CommonView.displayContinueAction();
                     break;
                 case AppointmentMenuConstants.DELETE_APPOINTMENT:
-                    //deleteDoctor();
+                    deleteAppointment();
                     CommonView.displayContinueAction();
                     break;
                 case AppointmentMenuConstants.LIST_TODAY_APPOINTMENT:
-                    //deleteDoctor();
+                    displayTodayAppointmentList();
                     break;
                 case AppointmentMenuConstants.STATISTIC_APPOINTMENT:
-                    //deleteDoctor();
+                    System.out.println("Coming soon...");
                     CommonView.displayContinueAction();
                     break;
                 case AppointmentMenuConstants.RETURN:
@@ -94,7 +95,7 @@ public class AppointmentController {
             }
         }
         if (doctor == null) {
-            doctor = selectDoctor();
+            doctor = selectDoctor(false);
             if (doctor == null) {
                 return;
             }
@@ -106,7 +107,7 @@ public class AppointmentController {
         while (emptySchedules.entrySet().stream().noneMatch(Map.Entry::getValue)) {
             isReSelectDoctor = appointmentView.reSelectDoctorOrDate(doctor, appointmentDate);
             if (isReSelectDoctor) {
-                doctor = selectDoctor();
+                doctor = selectDoctor(false);
                 if (doctor == null) {
                     return;
                 }
@@ -172,13 +173,18 @@ public class AppointmentController {
         }
     }
 
-    private DoctorEntity selectDoctor() {
+    private DoctorEntity selectDoctor(boolean isUpdate) {
         String keyword;
         List<DoctorEntity> foundDoctors;
         boolean selection;
         DoctorEntity selectedDoctor = null;
+        String message = !isUpdate ? "Nhập mã, tên, chuyên khoa hoặc số điện thoại của bác sĩ cần lên lịch hẹn: "
+                : "Nhập mã, tên, chuyên khoa hoặc số điện thoại của bác sĩ khác cần lên lịch hẹn. Hoặc để trống nếu không cần đổi bác sĩ: ";
         do {
-            keyword = CommonView.inputStringKeyword("Nhập mã, tên, chuyên khoa hoặc số điện thoại của bác sĩ cần lên lịch hẹn: ");
+            keyword = CommonView.inputStringKeyword(message);
+            if (isUpdate && keyword.isEmpty()) {
+                return null;
+            }
             foundDoctors = doctorService.findByKeyword(keyword);
             if (foundDoctors.isEmpty()) {
                 ConsoleUtil.printlnYellow("Không tìm thấy bác sĩ nào tương ứng. Vui lòng nhập lại.");
@@ -222,6 +228,10 @@ public class AppointmentController {
 
     public void displayAppointmentList() {
         List<AppointmentEntity> appointments = appointmentService.getAll();
+        if (appointments.isEmpty()) {
+            ConsoleUtil.printlnRed("Danh sách trống!!!");
+            return;
+        }
         appointmentView.display(appointments);
         displaySelectAppointment(appointments);
     }
@@ -239,7 +249,7 @@ public class AppointmentController {
     }
 
     private void displayDetailMenu(AppointmentEntity appointment) {
-        if (appointment.getStatus().equals(AppointmentStatus.CANCELLED)) {
+        if (appointment.getStatus().equals(AppointmentStatus.RESCHEDULED)) {
             CommonView.displayContinueAction();
             return;
         }
@@ -248,13 +258,19 @@ public class AppointmentController {
         while (true) {
             choice = CommonView.inputFeatureSelection();
             switch (choice) {
-                case DoctorMenuConstants.UPDATE_DOCTOR_IN_DETAIL:
-                    //updateDoctor(doctor);
+                case AppointmentMenuConstants.UPDATE_APPOINTMENT_IN_DETAIL:
+                    updateAppointment(appointment);
                     return;
-                case DoctorMenuConstants.DELETE_DOCTOR_IN_DETAIL:
-                    //deleteDoctor(doctor);
+                case AppointmentMenuConstants.UPDATE_STATUS_APPOINTMENT_IN_DETAIL:
+                    updateStatusAppointment(appointment);
                     return;
-                case DoctorMenuConstants.RETURN:
+                case AppointmentMenuConstants.RESCHEDULE_APPOINTMENT_IN_DETAIL:
+                    rescheduleAppointment(appointment);
+                    return;
+                case AppointmentMenuConstants.DELETE_APPOINTMENT_IN_DETAIL:
+                    deleteAppointment(appointment);
+                    return;
+                case AppointmentMenuConstants.RETURN:
                     return;
                 default:
                     ConsoleUtil.printlnYellow("Không có tính năng phù hợp. Vui lòng chọn lại.");
@@ -274,6 +290,7 @@ public class AppointmentController {
             AppointmentEntity appointment = appointmentService.findById(id);
             if (appointment != null && idsCanSelect.contains(id)) {
                 appointmentView.showDetail(appointment);
+                displayDetailMenu(appointment);
                 return;
             } else {
                 ConsoleUtil.printlnYellow("Cần nhập đúng mã lịch hẹn có trên danh sách hiện tại. Vui lòng nhập lại hoặc [ENTER] để tiếp tục...");
@@ -338,7 +355,7 @@ public class AppointmentController {
 
     private void searchAppointmentByStatus() {
         List<AppointmentEntity> foundAppointments;
-        AppointmentStatus status = appointmentView.selectAppointmentStatus("Chọn trạng thái lịch hẹn cần tìm: ", false);
+        AppointmentStatus status = appointmentView.selectAppointmentStatus("Chọn trạng thái lịch hẹn cần tìm: ", false, false, null);
         foundAppointments = appointmentService.findByStatus(status);
         displaySearchResult(foundAppointments);
     }
@@ -361,6 +378,114 @@ public class AppointmentController {
                 appointmentView.display(appointments);
                 displaySelectAppointment(appointments);
             }
+        }
+    }
+
+    private void updateAppointment(AppointmentEntity appointment) {
+        List<AppointmentEntity> foundAppointments = appointmentService.findByDoctorAndDate(appointment.getDoctor().getId(), appointment.getAppointmentDate());
+        Map<String, Boolean> emptySchedules = appointmentService.findEmptyAppointmentsByDoctorAndDate(foundAppointments, appointment.getDoctor());
+        AppointmentEntity updatedAppointment = appointmentView.inputAppointment(appointment.getPatient(), appointment.getDoctor(), appointment.getAppointmentDate(), emptySchedules, appointment, true);
+        if (appointmentService.update(updatedAppointment)) {
+            ConsoleUtil.printlnGreen("Cập nhật thành công lịch hẹn của bệnh nhân " + appointment.getPatient().getFullName() + " (" + appointment.getPatient().getId() + ")");
+            appointmentView.showDetail(updatedAppointment);
+            displayDetailMenu(updatedAppointment);
+        } else {
+            ConsoleUtil.printlnRed("Cập nhật không thành công. Đã có lỗi xảy ra!");
+        }
+    }
+
+    private void updateAppointment() {
+        String id = CommonView.inputStringKeyword("Nhập mã lịch hẹn cần cập nhật: ");
+        AppointmentEntity appointment = appointmentService.findById(id);
+        if (appointment != null) {
+            ConsoleUtil.printlnGreen("Tìm thấy lịch hẹn có mã tương ứng.");
+            appointmentView.showDetail(appointment);
+            boolean isUpdateInfo = appointmentView.selectTypeUpdate();
+            if (isUpdateInfo) {
+                updateAppointment(appointment);
+            } else {
+                updateStatusAppointment(appointment);
+            }
+        } else {
+            ConsoleUtil.printlnYellow("Không tìm thấy lịch hẹn nào có mã " + id);
+        }
+    }
+
+    private void updateStatusAppointment(AppointmentEntity appointment) {
+        AppointmentStatus status = appointmentView.selectAppointmentStatus("Chọn trạng thái cần cập nhật: ", false, true, appointment);
+        appointment.setStatus(status);
+        if (appointmentService.update(appointment)) {
+            ConsoleUtil.printlnGreen("Cập nhật thành công lịch hẹn của bệnh nhân " + appointment.getPatient().getFullName() + " (" + appointment.getPatient().getId() + ")");
+            appointmentView.showDetail(appointment);
+            displayDetailMenu(appointment);
+        } else {
+            ConsoleUtil.printlnRed("Cập nhật không thành công. Đã có lỗi xảy ra!");
+        }
+    }
+
+    private void deleteAppointment(AppointmentEntity appointment) {
+        Boolean confirmDelete = CommonView.confirmDelete();
+        if (confirmDelete) {
+            if (appointmentService.delete(appointment.getId())) {
+                ConsoleUtil.printlnGreen("Xoá thành công lịch hẹn của bệnh nhân " + appointment.getPatient().getFullName() + " (" + appointment.getPatient().getId() + ")");
+            } else {
+                ConsoleUtil.printlnRed("Xoá không thành công. Đã có lỗi xảy ra!");
+            }
+        }
+    }
+
+    private void deleteAppointment() {
+        String id = CommonView.inputStringKeyword("Nhập mã lịch hẹn cần xoá: ");
+        AppointmentEntity appointment = appointmentService.findById(id);
+        if (appointment != null) {
+            ConsoleUtil.printlnGreen("Tìm thấy lịch hẹn có mã tương ứng.");
+            appointmentView.showDetail(appointment);
+            deleteAppointment(appointment);
+        } else {
+            ConsoleUtil.printlnYellow("Không tìm thấy lịch hẹn nào có mã " + id);
+        }
+    }
+
+    private void displayTodayAppointmentList() {
+        List<AppointmentEntity> appointments = appointmentService.findByDate(LocalDate.now());
+        if (appointments.isEmpty()) {
+            ConsoleUtil.printlnRed("Danh sách trống!!!");
+            return;
+        }
+        appointmentView.display(appointments, String.format("DANH SÁCH LỊCH HẸN NGÀY HÔM NAY (%s, %s)", DayOfWeekInVietnamese.fromCode(LocalDate.now().getDayOfWeek().toString()).getDisplayName(), DateUtil.formatDate(LocalDate.now())));
+        displaySelectAppointment(appointments);
+    }
+
+    private void rescheduleAppointment(AppointmentEntity appointment) {
+        DoctorEntity doctor = selectDoctor(true);
+        if (doctor == null) {
+            doctor = appointment.getDoctor();
+        }
+        LocalDate appointmentDate = appointmentView.selectAppointmentDate("\uD83D\uDCC5 Ngày hẹn khám mới (dd/MM/yyyy): ");
+        List<AppointmentEntity> foundAppointments = appointmentService.findByDoctorAndDate(doctor.getId(), appointmentDate);
+        Map<String, Boolean> emptySchedules = appointmentService.findEmptyAppointmentsByDoctorAndDate(foundAppointments, doctor);
+        boolean isReSelectDoctor;
+        while (emptySchedules.entrySet().stream().noneMatch(Map.Entry::getValue)) {
+            isReSelectDoctor = appointmentView.reSelectDoctorOrDate(doctor, appointmentDate);
+            if (isReSelectDoctor) {
+                doctor = selectDoctor(false);
+                if (doctor == null) {
+                    return;
+                }
+            } else {
+                appointmentDate = appointmentView.selectAppointmentDate();
+            }
+            foundAppointments = appointmentService.findByDoctorAndDate(doctor.getId(), appointmentDate);
+            emptySchedules = appointmentService.findEmptyAppointmentsByDoctorAndDate(foundAppointments, doctor);
+        }
+        String appointmentTime = appointmentView.selectAppointmentTime(emptySchedules, appointment, false);
+        String rescheduleReason = InputValidatorUtil.inputString("Lý do dời lịch: ", "lý do dời lịch", 3, 255, false);
+        appointment.setStatus(AppointmentStatus.RESCHEDULED);
+        AppointmentEntity rescheduleAppointment = new AppointmentEntity(appointment.getPatientId(), doctor.getId(), appointmentDate, appointmentTime, AppointmentStatus.SCHEDULED, appointment.getReason(), appointment.getNotes(), appointment.getId(), null, rescheduleReason);
+        if (appointmentService.reschedule(appointment, rescheduleAppointment)) {
+            ConsoleUtil.printlnGreen("Dời lịch thành công lịch hẹn cho bệnh nhân " + rescheduleAppointment.getPatient().getFullName() + " (" + rescheduleAppointment.getPatient().getId() + ")");
+        } else {
+            ConsoleUtil.printlnRed("Dời lịch không thành công. Đã có lỗi xảy ra!");
         }
     }
 }

@@ -98,4 +98,12 @@ public class AppointmentServiceImpl implements AppointmentService {
     public List<AppointmentEntity> findByDate(LocalDate appointmentDate) {
         return appointmentRepository.findByDate(appointmentDate);
     }
+
+    @Override
+    public boolean reschedule(AppointmentEntity appointment, AppointmentEntity rescheduleAppointment) {
+        String rescheduleId = generateId();
+        rescheduleAppointment.setId(rescheduleId);
+        appointment.setNewAppointmentId(rescheduleId);
+        return appointmentRepository.reschedule(appointment, rescheduleAppointment);
+    }
 }

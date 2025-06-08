@@ -17,4 +17,5 @@ public interface AppointmentRepository extends IRepository<AppointmentEntity> {
     List<AppointmentEntity> findByKeywordOfDoctor(String keyword);
     List<AppointmentEntity> findByStatus(AppointmentStatus status);
     List<AppointmentEntity> findByDate(LocalDate appointmentDate);
+    boolean reschedule(AppointmentEntity appointment, AppointmentEntity rescheduleAppointment);
 }

@@ -68,6 +68,10 @@ public class DoctorController {
     private void displayDoctorList() {
         List<DoctorEntity> doctors = doctorService.getAll();
         doctorView.display(doctors);
+        if (doctors.isEmpty()) {
+            ConsoleUtil.printlnRed("Danh sách trống!!!");
+            return;
+        }
         displaySelectDoctor(doctors);
     }
 
@@ -222,6 +226,7 @@ public class DoctorController {
         if (doctorService.update(updatedDoctor)) {
             ConsoleUtil.printlnGreen("Cập nhật thành công bác sĩ " + doctor.getFullName() + " (" + doctor.getId() + ")");
             doctorView.showDetail(updatedDoctor);
+            displayDetailMenu(updatedDoctor);
         } else {
             ConsoleUtil.printlnRed("Cập nhật không thành công. Đã có lỗi xảy ra!");
         }

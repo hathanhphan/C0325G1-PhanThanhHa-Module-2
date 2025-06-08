@@ -5,7 +5,6 @@ import case_study_hospital_management.util.CSVUtil;
 import case_study_hospital_management.util.DateUtil;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class AppointmentEntity {
     private String id;

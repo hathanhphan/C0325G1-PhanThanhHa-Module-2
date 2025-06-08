@@ -2,7 +2,6 @@ package case_study_hospital_management.view;
 
 import case_study_hospital_management.common.constants.ConfigurationConstants;
 import case_study_hospital_management.common.enums.AppointmentStatus;
-import case_study_hospital_management.common.enums.DoctorSpecialization;
 import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.DoctorEntity;
 import case_study_hospital_management.entity.PatientEntity;
@@ -178,24 +177,41 @@ public class AppointmentView {
         if (isUpdate) {
             ConsoleColorUtil.printlnYellow("Để trống nếu không muốn cập nhật thông tin nào đó...");
         }
-        String appointmentTime = selectAppointmentTime(emptySchedules);
+        String appointmentTime;
+        if (isUpdate) {
+            appointmentTime = selectAppointmentTime(emptySchedules, appointment, true);
+        } else {
+            appointmentTime = selectAppointmentTime(emptySchedules, null, false);
+        }
         String reason = InputValidatorUtil.inputString("\uD83D\uDCCB Lý do khám: ", "lý do khám", 3, 255, isUpdate);
         String notes = InputValidatorUtil.inputString("\uD83D\uDCDD Ghi chú: ", "ghi chú", 3, 255, true);
-        return new AppointmentEntity(patient.getId(), doctor.getId(), appointmentDate, appointmentTime, AppointmentStatus.SCHEDULED, reason, notes, null, null, "");
+
+        if (isUpdate) {
+            if (appointmentTime == null) appointmentTime = appointment.getAppointmentTime();
+            if (reason == null) reason = appointment.getReason();
+            if (notes == null) notes = appointment.getNotes();
+            return new AppointmentEntity(appointment.getId(), patient.getId(), doctor.getId(), appointmentDate, appointmentTime, appointment.getStatus(), reason, notes, appointment.getParentAppointmentId(), appointment.getNewAppointmentId(), appointment.getRescheduleReason());
+        } else {
+            return new AppointmentEntity(patient.getId(), doctor.getId(), appointmentDate, appointmentTime, AppointmentStatus.SCHEDULED, reason, notes, null, null, "");
+        }
     }
 
-    public String selectAppointmentTime(Map<String, Boolean> emptySchedules) {
+    public String selectAppointmentTime(Map<String, Boolean> emptySchedules, AppointmentEntity appointment, boolean allowEmpty) {
         int index = 1;
         String scheduleStatus;
         int breakLineIndex = 4;
         int schedulesLength = emptySchedules.size();
         Map<Integer, String> indexesCanChoose = new HashMap<>();
         for (Map.Entry<String, Boolean> schedule : emptySchedules.entrySet()) {
-            if (schedule.getValue()) {
-                scheduleStatus = ConsoleUtil.formatGreen("Đang trống");
-                indexesCanChoose.put(index, schedule.getKey());
+            if (schedule.getKey().equalsIgnoreCase(appointment.getAppointmentTime())) {
+                scheduleStatus = ConsoleUtil.formatYellow("Hiện tại");
             } else {
-                scheduleStatus = ConsoleUtil.formatYellow("Đã đặt");
+                if (schedule.getValue()) {
+                    scheduleStatus = ConsoleUtil.formatGreen("Đang trống");
+                    indexesCanChoose.put(index, schedule.getKey());
+                } else {
+                    scheduleStatus = ConsoleUtil.formatYellow("Đã đặt");
+                }
             }
             System.out.printf("%-46s", String.format("[%d] %s - %s", index, schedule.getKey(), scheduleStatus));
             if (index % breakLineIndex == 0 && index != schedulesLength) {
@@ -204,13 +220,18 @@ public class AppointmentView {
             index++;
         }
         System.out.println();
+        String input;
         int choice;
         while (true) {
             try {
                 System.out.print("⏰ Thời gian (Chọn số tương ứng lịch): ");
-                choice = Integer.parseInt(sc.nextLine());
+                input = sc.nextLine();
+                if (input.isEmpty() && allowEmpty) {
+                    return null;
+                }
+                choice = Integer.parseInt(input);
                 if (!indexesCanChoose.containsKey(choice)) {
-                    ConsoleColorUtil.printlnRed("Bạn nhập 1 số vượt ngoài lựa chọn hoặc thời gian đó đã có người đặt. Vui lòng nhập lại");
+                    ConsoleColorUtil.printlnRed("Bạn nhập 1 số vượt ngoài lựa chọn hoặc thời gian đó đã có người đặt. Vui lòng chọn lại.");
                 } else {
                     return indexesCanChoose.get(choice);
                 }
@@ -221,7 +242,11 @@ public class AppointmentView {
     }
 
     public LocalDate selectAppointmentDate() {
-        return InputValidatorUtil.inputFutureDate("\uD83D\uDCC5 Ngày hẹn khám (dd/MM/yyyy): ", "ngày hẹn khám", false);
+        return selectAppointmentDate("\uD83D\uDCC5 Ngày hẹn khám (dd/MM/yyyy): ");
+    }
+
+    public LocalDate selectAppointmentDate(String msg) {
+        return InputValidatorUtil.inputFutureDate(msg, "ngày hẹn khám", false);
     }
 
     public boolean selectThisPerson(String displayName) {
@@ -269,24 +294,23 @@ public class AppointmentView {
         System.out.println("\t\uD83D\uDCC5 5. Tìm theo ngày");
     }
 
-    public AppointmentStatus selectAppointmentStatus(String message, boolean allowEmpty) {
+    public AppointmentStatus selectAppointmentStatus(String message, boolean allowEmpty, boolean isUpdate, AppointmentEntity appointment) {
         String status;
         System.out.println(message);
         int index = 1;
         int breakLineIndex = 3;
-        int maxCodeLength = 0;
-        int maxDisplayNameLength = 0;
         int statusListLength = AppointmentStatus.values().length;
         for (AppointmentStatus as : AppointmentStatus.values()) {
-            if (as.getCode().length() > maxCodeLength && as != AppointmentStatus.UNKNOWN) {
-                maxCodeLength = as.getCode().length();
+            if (isUpdate && as.equals(AppointmentStatus.RESCHEDULED)) {
+                continue;
             }
-            if (as.getDisplayName().length() > maxDisplayNameLength) {
-                maxDisplayNameLength = as.getDisplayName().length();
+            String formatString = String.format("[%s] %s", as.getCode(), as.getDisplayName());
+            if (appointment.getStatus().equals(as)) {
+                System.out.printf("%-40s", ConsoleUtil.formatGreen(formatString));
+            } else {
+
+                System.out.printf("%-40s", formatString);
             }
-        }
-        for (AppointmentStatus as : AppointmentStatus.values()) {
-            System.out.printf("%-30s", String.format("[%s] %s", as.getCode(), as.getDisplayName()));
             if (index % breakLineIndex == 0 && index != statusListLength) {
                 System.out.println();
             }
@@ -303,6 +327,24 @@ public class AppointmentView {
                 return AppointmentStatus.from(status);
             } catch (IllegalArgumentException e) {
                 ConsoleColorUtil.printlnRed("Vui lòng nhập 1 trạng thái hợp lệ.");
+            }
+        }
+    }
+
+    public boolean selectTypeUpdate() {
+        int choice;
+        while (true) {
+            try {
+                System.out.println("Chọn loại cập nhật: ");
+                System.out.println("\t1. Cập nhật thông tin lịch hẹn");
+                System.out.println("\t2. Cập nhật trạng thái");
+                System.out.print("Lựa chọn của bạn: ");
+                choice = Integer.parseInt(sc.nextLine());
+                if (choice == 1) return true;
+                else if (choice == 2) return false;
+                else ConsoleColorUtil.printlnRed("Bạn chọn chức năng không hợp lệ. Vui lòng chọn lại.");
+            } catch (NumberFormatException e) {
+                ConsoleColorUtil.printlnRed("Bạn chọn chức năng không hợp lệ. Vui lòng chọn lại.");
             }
         }
     }

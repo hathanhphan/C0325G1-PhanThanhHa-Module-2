@@ -216,6 +216,7 @@ public class PatientController {
         if (patientService.update(updatedPatient)) {
             ConsoleUtil.printlnGreen("Cập nhật thành công bệnh nhân " + patient.getFullName() + " (" + patient.getId() + ")");
             patientView.showDetail(updatedPatient);
+            displayDetailMenu(updatedPatient);
         } else {
             ConsoleUtil.printlnRed("Cập nhật không thành công. Đã có lỗi xảy ra!");
         }
@@ -260,6 +261,10 @@ public class PatientController {
     private void displayPatientList() {
         List<PatientEntity> patients = patientService.getAll();
         patientView.display(patients);
+        if (patients.isEmpty()) {
+            ConsoleUtil.printlnRed("Danh sách trống!!!");
+            return;
+        }
         displaySelectPatient(patients);
     }
 
