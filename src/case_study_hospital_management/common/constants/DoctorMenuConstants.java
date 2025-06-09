@@ -7,6 +7,7 @@ public class DoctorMenuConstants {
     public static final int LIST_DOCTOR = 3;
     public static final int UPDATE_DOCTOR = 4;
     public static final int DELETE_DOCTOR = 5;
+    public static final int STATISTIC_DOCTOR = 6;
     public static final int RETURN = 0;
 
     // Search menu
@@ -22,7 +23,7 @@ public class DoctorMenuConstants {
     public static final int VIEW_APPOINTMENT_IN_DETAIL = 4;
 
     // Statistic menu
-    public static final int STATISTIC_PATIENT_BY_AGE_GROUP = 1;
-    public static final int STATISTIC_PATIENT_BY_GENDER = 2;
-    public static final int STATISTIC_PATIENT_BY_BLOOD_TYPE = 3;
+    public static final int STATISTIC_PATIENT_BY_SPEC = 1;
+    public static final int STATISTIC_PATIENT_BY_YEAR_EXP = 2;
+    public static final int STATISTIC_PATIENT_BY_APPOINTMENT = 3;
 }

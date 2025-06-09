@@ -44,6 +44,10 @@ public class DoctorView {
         ConsoleUtil.printlnItalic("\t\uD83D\uDD04 Sửa đổi thông tin bác sĩ");
         ConsoleUtil.printlnBold("\uD83D\uDDD1\uFE0F 5. XÓA BÁC SĨ");
         ConsoleUtil.printlnItalic("\t⚠\uFE0F Xóa bác sĩ khỏi hệ thống (cẩn thận!)");
+        ConsoleUtil.printlnBold("\uD83D\uDCC8 6. THỐNG KÊ BÁC SĨ");
+        ConsoleUtil.printlnItalic("\t\uD83C\uDFE5 Thống kê theo chuyên ngành");
+        ConsoleUtil.printlnItalic("\t⭐ Thống kê theo kinh nghiệm");
+        ConsoleUtil.printlnItalic("\t\uD83D\uDCC5 Thống kê theo lịch hẹn");
         ConsoleUtil.printlnBold("\uD83D\uDD19 0. QUAY LẠI MENU CHÍNH");
         System.out.println("=".repeat(ConfigurationConstants.SEPARATION_LENGTH));
     }
@@ -267,5 +271,11 @@ public class DoctorView {
         System.out.println("➕ 3. Thêm lịch hẹn mới");
         System.out.println("\uD83D\uDCC5 4. Xem lịch làm việc");
         System.out.println("\uD83D\uDD19 0. Trở về");
+    }
+
+    public void displayStatisticMenu() {
+        System.out.println("\uD83C\uDFE5 1. Thống kê theo chuyên ngành");
+        System.out.println("⭐ 2. Thống kê theo kinh nghiệm");
+        System.out.println("\uD83D\uDCC5 3. Thống kê theo lịch hẹn");
     }
 }

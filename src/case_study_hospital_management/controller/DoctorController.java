@@ -1,6 +1,7 @@
 package case_study_hospital_management.controller;
 
 import case_study_hospital_management.common.constants.DoctorMenuConstants;
+import case_study_hospital_management.common.constants.PatientMenuConstants;
 import case_study_hospital_management.common.enums.DoctorSpecialization;
 import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.DoctorEntity;
@@ -54,6 +55,10 @@ public class DoctorController {
                     break;
                 case DoctorMenuConstants.DELETE_DOCTOR:
                     deleteDoctor();
+                    CommonView.displayContinueAction();
+                    break;
+                case DoctorMenuConstants.STATISTIC_DOCTOR:
+                    statisticDoctor();
                     CommonView.displayContinueAction();
                     break;
                 case DoctorMenuConstants.RETURN:
@@ -288,6 +293,29 @@ public class DoctorController {
                 }
             } catch (NumberFormatException e) {
                 ConsoleUtil.printlnRed("Vui lòng nhập lựa chọn của bạn là 1 số nguyên tương ứng với [STT]. Hoặc [ENTER] để tiếp tục...");
+            }
+        }
+    }
+
+    private void statisticDoctor() {
+        int choice;
+        doctorView.displayStatisticMenu();
+        while (true) {
+            choice = CommonView.inputFeatureSelection();
+            switch (choice) {
+                case DoctorMenuConstants.STATISTIC_PATIENT_BY_SPEC:
+                    CommonView.displayStatistic(doctorService.statisticBySpec(), "Chuyên ngành", "Số lượng (Bác sĩ)", "THỐNG KÊ BÁC SĨ THEO CHUYÊN NGÀNH");
+                    return;
+                case DoctorMenuConstants.STATISTIC_PATIENT_BY_YEAR_EXP:
+                    CommonView.displayStatistic(doctorService.statisticByYearExp(), "Kinh nghiệm", "Số lượng (Bác sĩ)", "THỐNG KÊ BÁC SĨ THEO NĂM KINH NGHIỆM");
+                    return;
+                case DoctorMenuConstants.STATISTIC_PATIENT_BY_APPOINTMENT:
+                    CommonView.displayStatistic(doctorService.statisticByNumOfAppointment(), "Bác sĩ", "Số lượng lịch hẹn", "THỐNG KÊ BÁC SĨ THEO SỐ LƯỢNG LỊCH HẸN");
+                    return;
+                case DoctorMenuConstants.RETURN:
+                    return;
+                default:
+                    ConsoleUtil.printlnYellow("Không có tính năng phù hợp. Vui lòng chọn lại.");
             }
         }
     }

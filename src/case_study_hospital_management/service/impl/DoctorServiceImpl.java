@@ -121,5 +121,18 @@ public class DoctorServiceImpl implements DoctorService {
         return String.format("D%06d", maxId + 1);
     }
 
+    @Override
+    public Map<String, Integer> statisticBySpec() {
+        return doctorRepository.statisticBySpec();
+    }
 
+    @Override
+    public Map<String, Integer> statisticByYearExp() {
+        return doctorRepository.statisticByYearExp();
+    }
+
+    @Override
+    public Map<String, Integer> statisticByNumOfAppointment() {
+        return doctorRepository.statisticByNumOfAppointment();
+    }
 }

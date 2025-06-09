@@ -16,4 +16,7 @@ public interface DoctorService extends IService<DoctorEntity> {
     List<DoctorEntity> findByKeyword(String keyword);
     List<AppointmentEntity> findAllAppointmentByDoctorId(String id);
     Map<String, List<AppointmentEntity>> groupAppointmentByDate(List<AppointmentEntity> appointments);
+    Map<String, Integer> statisticBySpec();
+    Map<String, Integer> statisticByYearExp();
+    Map<String, Integer> statisticByNumOfAppointment();
 }

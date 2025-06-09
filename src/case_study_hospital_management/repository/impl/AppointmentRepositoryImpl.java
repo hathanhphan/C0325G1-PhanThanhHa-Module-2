@@ -11,6 +11,7 @@ import case_study_hospital_management.repository.AppointmentRepository;
 import case_study_hospital_management.repository.DoctorRepository;
 import case_study_hospital_management.repository.PatientRepository;
 import case_study_hospital_management.util.CSVUtil;
+import case_study_hospital_management.util.ConsoleUtil;
 import case_study_hospital_management.util.DateUtil;
 
 import java.time.LocalDate;
@@ -47,27 +48,31 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
         List<AppointmentEntity> appointments = new ArrayList<>();
         List<String> lines = CSVUtil.readCSVFile(fileName);
         for (String line : lines) {
-            if (lines.isEmpty()) {
+            String[] properties = CSVUtil.parseCsvLine(line);
+            if (properties.length < 12) {
                 continue;
             }
-            String[] properties = CSVUtil.parseCsvLine(line);
-            AppointmentEntity appointment = new AppointmentEntity(
-                    properties[0],
-                    properties[1],
-                    properties[2],
-                    DateUtil.parseDate(properties[3]),
-                    properties[4],
-                    AppointmentStatus.fromCode(properties[5]),
-                    properties[6],
-                    properties[7],
-                    properties[8],
-                    properties[9],
-                    properties[10]
-            );
-            appointment.setDeleted(Boolean.parseBoolean(properties[11]));
-            appointment.setPatient(patientRepository.findById(appointment.getPatientId()));
-            appointment.setDoctor(doctorRepository.findById(appointment.getDoctorId()));
-            appointments.add(appointment);
+            try {
+                AppointmentEntity appointment = new AppointmentEntity(
+                        properties[0],
+                        properties[1],
+                        properties[2],
+                        DateUtil.parseDate(properties[3]),
+                        properties[4],
+                        AppointmentStatus.fromCode(properties[5]),
+                        properties[6],
+                        properties[7],
+                        properties[8],
+                        properties[9],
+                        properties[10]
+                );
+                appointment.setDeleted(Boolean.parseBoolean(properties[11]));
+                appointment.setPatient(patientRepository.findById(appointment.getPatientId()));
+                appointment.setDoctor(doctorRepository.findById(appointment.getDoctorId()));
+                appointments.add(appointment);
+            } catch (RuntimeException e) {
+                ConsoleUtil.printlnYellow("Đọc không thành công dữ liệu: " + line);
+            }
         }
         return appointments;
     }

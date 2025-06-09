@@ -6,6 +6,7 @@ import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.PatientEntity;
 import case_study_hospital_management.repository.AppointmentRepository;
 import case_study_hospital_management.repository.PatientRepository;
+import case_study_hospital_management.util.ConsoleUtil;
 import case_study_hospital_management.util.PersonHelper;
 import case_study_hospital_management.util.CSVUtil;
 import case_study_hospital_management.util.DateUtil;
@@ -64,20 +65,27 @@ public class PatientRepositoryImpl implements PatientRepository {
         List<String> lines = CSVUtil.readCSVFile(fileName);
         for (String line : lines) {
             String[] properties = CSVUtil.parseCsvLine(line);
-            PatientEntity patient = new PatientEntity(
-                    properties[0],
-                    properties[1],
-                    properties[2].equals("null") ? null : Boolean.parseBoolean(properties[2]),
-                    properties[3],
-                    DateUtil.parseDate(properties[4]),
-                    properties[5],
-                    properties[6],
-                    BloodType.fromDisplayName(properties[7]),
-                    properties[8],
-                    DateUtil.parseDate(properties[9])
-            );
-            patient.setDeleted(Boolean.parseBoolean(properties[10]));
-            patients.add(patient);
+            if (properties.length < 11) {
+                continue;
+            }
+            try {
+                PatientEntity patient = new PatientEntity(
+                        properties[0],
+                        properties[1],
+                        properties[2].equals("null") ? null : Boolean.parseBoolean(properties[2]),
+                        properties[3],
+                        DateUtil.parseDate(properties[4]),
+                        properties[5],
+                        properties[6],
+                        BloodType.fromDisplayName(properties[7]),
+                        properties[8],
+                        DateUtil.parseDate(properties[9])
+                );
+                patient.setDeleted(Boolean.parseBoolean(properties[10]));
+                patients.add(patient);
+            } catch (RuntimeException e) {
+                ConsoleUtil.printlnYellow("Đọc không thành công dữ liệu: " + line);
+            }
         }
         return patients;
     }

@@ -4,12 +4,13 @@ import case_study_hospital_management.common.constants.ConfigurationConstants;
 import case_study_hospital_management.common.enums.DoctorSpecialization;
 import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.DoctorEntity;
+import case_study_hospital_management.entity.PatientEntity;
 import case_study_hospital_management.repository.AppointmentRepository;
 import case_study_hospital_management.repository.DoctorRepository;
 import case_study_hospital_management.util.CSVUtil;
+import case_study_hospital_management.util.ConsoleUtil;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DoctorRepositoryImpl implements DoctorRepository {
@@ -77,20 +78,27 @@ public class DoctorRepositoryImpl implements DoctorRepository {
         List<String> lines = CSVUtil.readCSVFile(fileName);
         for (String line : lines) {
             String[] properties = CSVUtil.parseCsvLine(line);
-            DoctorEntity doctor = new DoctorEntity(
-                    properties[0],
-                    properties[1],
-                    properties[2].equals("null") ? null : Boolean.parseBoolean(properties[2]),
-                    properties[3],
-                    DoctorSpecialization.fromDisplayName(properties[4]),
-                    properties[5],
-                    properties[6],
-                    Integer.parseInt(properties[7]),
-                    properties[8],
-                    Double.parseDouble(properties[9])
-            );
-            doctor.setDeleted(Boolean.parseBoolean(properties[10]));
-            doctors.add(doctor);
+            if (properties.length < 11) {
+                continue;
+            }
+            try {
+                DoctorEntity doctor = new DoctorEntity(
+                        properties[0],
+                        properties[1],
+                        properties[2].equals("null") ? null : Boolean.parseBoolean(properties[2]),
+                        properties[3],
+                        DoctorSpecialization.fromDisplayName(properties[4]),
+                        properties[5],
+                        properties[6],
+                        Integer.parseInt(properties[7]),
+                        properties[8],
+                        Double.parseDouble(properties[9])
+                );
+                doctor.setDeleted(Boolean.parseBoolean(properties[10]));
+                doctors.add(doctor);
+            } catch (RuntimeException e) {
+                ConsoleUtil.printlnYellow("Đọc không thành công dữ liệu: " + line);
+            }
         }
         return doctors;
     }
@@ -146,5 +154,47 @@ public class DoctorRepositoryImpl implements DoctorRepository {
             return CSVUtil.writeCSVFile(fileName, doctors);
         }
         return false;
+    }
+
+    @Override
+    public Map<String, Integer> statisticBySpec() {
+        List<DoctorEntity> doctors = getCurrentList();
+        return doctors.stream()
+                .sorted(Comparator.comparing(a -> a.getSpecialization().getDisplayName()))
+                .map(p -> p.getSpecialization().getDisplayName())
+                .collect(Collectors.toMap(
+                        group -> group,
+                        group -> 1,
+                        Integer::sum,
+                        LinkedHashMap::new
+                ));
+    }
+
+    @Override
+    public Map<String, Integer> statisticByYearExp() {
+        List<DoctorEntity> doctors = getCurrentList();
+        return doctors.stream()
+                .sorted(Comparator.comparing(DoctorEntity::getYearOfExperience))
+                .map(p -> p.getYearOfExperience().toString() + " năm")
+                .collect(Collectors.toMap(
+                        group -> group,
+                        group -> 1,
+                        Integer::sum,
+                        LinkedHashMap::new
+                ));
+    }
+
+    @Override
+    public Map<String, Integer> statisticByNumOfAppointment() {
+        List<AppointmentEntity> appointments = appointmentRepository.findAll().stream().filter(a -> !a.getDeleted()).toList();
+        return appointments.stream()
+                .sorted(Comparator.comparing(e -> e.getDoctor().getFullName()))
+                .map(AppointmentEntity::getDoctorId)
+                .collect(Collectors.toMap(
+                        group -> findById(group).getFullName() + " (" + group + ")",
+                        group -> 1,
+                        Integer::sum,
+                        LinkedHashMap::new
+                ));
     }
 }

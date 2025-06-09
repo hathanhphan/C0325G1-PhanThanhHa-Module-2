@@ -15,7 +15,9 @@ public class CSVUtil{
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                lines.add(line);
+                if (!line.isEmpty()) {
+                    lines.add(line);
+                }
             }
         } catch (IOException e) {
             ConsoleUtil.printlnRed("✗ ERROR: " + e.getMessage());
