@@ -1,7 +1,9 @@
 package case_study_hospital_management.view;
 
 import case_study_hospital_management.common.constants.ConfigurationConstants;
+import case_study_hospital_management.common.constants.WorkingHoursConstants;
 import case_study_hospital_management.common.enums.AppointmentStatus;
+import case_study_hospital_management.common.enums.StatisticAppointmentCriteria;
 import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.DoctorEntity;
 import case_study_hospital_management.entity.PatientEntity;
@@ -203,17 +205,17 @@ public class AppointmentView {
         int schedulesLength = emptySchedules.size();
         Map<Integer, String> indexesCanChoose = new HashMap<>();
         for (Map.Entry<String, Boolean> schedule : emptySchedules.entrySet()) {
-            if (schedule.getKey().equalsIgnoreCase(appointment.getAppointmentTime())) {
-                scheduleStatus = ConsoleUtil.formatYellow("Hiện tại");
+            if (appointment != null && schedule.getKey().equalsIgnoreCase(appointment.getAppointmentTime())) {
+                scheduleStatus = ConsoleUtil.formatYellow(WorkingHoursConstants.CURRENT_SCHEDULE);
             } else {
                 if (schedule.getValue()) {
-                    scheduleStatus = ConsoleUtil.formatGreen("Đang trống");
+                    scheduleStatus = ConsoleUtil.formatGreen(WorkingHoursConstants.EMPTY_SCHEDULE);
                     indexesCanChoose.put(index, schedule.getKey());
                 } else {
-                    scheduleStatus = ConsoleUtil.formatYellow("Đã đặt");
+                    scheduleStatus = ConsoleUtil.formatYellow(WorkingHoursConstants.NOT_EMPTY_SCHEDULE);
                 }
             }
-            System.out.printf("%-46s", String.format("[%d] %s - %s", index, schedule.getKey(), scheduleStatus));
+            System.out.printf("%-46s", String.format("[%d] \uD83D\uDD58 %s - %s", index, schedule.getKey(), scheduleStatus));
             if (index % breakLineIndex == 0 && index != schedulesLength) {
                 System.out.println();
             }
@@ -347,5 +349,96 @@ public class AppointmentView {
                 ConsoleColorUtil.printlnRed("Bạn chọn chức năng không hợp lệ. Vui lòng chọn lại.");
             }
         }
+    }
+
+    public void displayStatisticMenu() {
+        System.out.println("\uD83D\uDCC8 1. Thống kê lịch hẹn ngày hôm nay");
+        System.out.println("\uD83D\uDCC8 2. Thống kê lịch hẹn theo ngày");
+        System.out.println("\uD83D\uDCC8 3. Thống kê lịch hẹn tháng này");
+        System.out.println("\uD83D\uDCC8 4. Thống kê lịch hẹn theo tháng");
+    }
+
+    public void displayStatisticAppointment(Map<String, Double> statisticResult, String title) {
+        if (!title.isEmpty()) {
+            System.out.println();
+            System.out.println("=".repeat(title.length() / 2) + title + "=".repeat(title.length() / 2));
+        }
+        if (statisticResult.containsKey(StatisticAppointmentCriteria.TOTAL.getCode())
+            && statisticResult.get(StatisticAppointmentCriteria.TOTAL.getCode()) == 0) {
+            ConsoleUtil.printlnYellow("Không tìm thấy lịch hẹn nào của tháng này!");
+            return;
+        }
+        int maxLengthPerCol = 0;
+        int length;
+        for (Map.Entry<String, Double> item : statisticResult.entrySet()) {
+            length = (StatisticAppointmentCriteria.fromCode(item.getKey()).getDisplayName() + ": " + String.format("%.2f", item.getValue())).length();
+            if (length > maxLengthPerCol) {
+                maxLengthPerCol = length;
+            }
+        }
+        int gap = 30;
+        maxLengthPerCol += gap;
+        String firstColumnContent;
+        String secondColumnContent;
+        // TOTAL & COMPLETED
+        if (statisticResult.containsKey(StatisticAppointmentCriteria.COMPLETED.getCode())
+            && statisticResult.containsKey(StatisticAppointmentCriteria.COMPLETED_PERCENT.getCode())) {
+            firstColumnContent = ConsoleUtil.formatBold("\uD83D\uDCC5 " + StatisticAppointmentCriteria.TOTAL.getDisplayName() + ": ")
+                    + ConsoleUtil.formatGreen(String.format("%.0f", statisticResult.get(StatisticAppointmentCriteria.TOTAL.getCode())));
+            secondColumnContent = ConsoleUtil.formatBold("✅ " + StatisticAppointmentCriteria.COMPLETED.getDisplayName() + ": ")
+                    + ConsoleUtil.formatGreen(String.format("%.0f (%.2f", statisticResult.get(StatisticAppointmentCriteria.COMPLETED.getCode()), statisticResult.get(StatisticAppointmentCriteria.COMPLETED_PERCENT.getCode())) + "%)");
+            CommonView.printOneLineTwoCol(firstColumnContent, secondColumnContent, maxLengthPerCol);
+        } else {
+            firstColumnContent = ConsoleUtil.formatBold("\uD83D\uDCC5 " + StatisticAppointmentCriteria.TOTAL.getDisplayName() + ": ")
+                    + ConsoleUtil.formatGreen(String.format("%.0f", statisticResult.get(StatisticAppointmentCriteria.TOTAL.getCode())));
+            secondColumnContent = ConsoleUtil.formatBold("✅ " + StatisticAppointmentCriteria.COMPLETED.getDisplayName() + ": ") + ConsoleUtil.formatGreen("0");
+            CommonView.printOneLineTwoCol(firstColumnContent, secondColumnContent, maxLengthPerCol);
+        }
+
+        // EXAMINATION and SCHEDULED
+        if (statisticResult.containsKey(StatisticAppointmentCriteria.EXAMINATION.getCode())) {
+            firstColumnContent = ConsoleUtil.formatBold("\uD83D\uDD04 " + StatisticAppointmentCriteria.EXAMINATION.getDisplayName() + ": ")
+                    + ConsoleUtil.formatGreen(String.format("%.0f", statisticResult.get(StatisticAppointmentCriteria.EXAMINATION.getCode())));
+        } else {
+            firstColumnContent = ConsoleUtil.formatBold("\uD83D\uDD04 " + StatisticAppointmentCriteria.EXAMINATION.getDisplayName() + ": ") + ConsoleUtil.formatGreen("0");
+        }
+        if (statisticResult.containsKey(StatisticAppointmentCriteria.SCHEDULED.getCode())) {
+            secondColumnContent = ConsoleUtil.formatBold("⏳ " + StatisticAppointmentCriteria.SCHEDULED.getDisplayName() + ": ")
+                    + ConsoleUtil.formatGreen(String.format("%.0f", statisticResult.get(StatisticAppointmentCriteria.SCHEDULED.getCode())));
+        } else {
+            secondColumnContent = ConsoleUtil.formatBold("⏳ " + StatisticAppointmentCriteria.SCHEDULED.getDisplayName() + ": ") + ConsoleUtil.formatGreen("0");
+        }
+        CommonView.printOneLineTwoCol(firstColumnContent, secondColumnContent, maxLengthPerCol);
+
+        // ATTENDANCE and CANCELLED
+        if (statisticResult.containsKey(StatisticAppointmentCriteria.ATTENDANCE_PERCENT.getCode())) {
+            firstColumnContent = ConsoleUtil.formatBold("\uD83D\uDCC8 " + StatisticAppointmentCriteria.ATTENDANCE_PERCENT.getDisplayName() + ": ")
+                    + ConsoleUtil.formatGreen(String.format("%.2f", statisticResult.get(StatisticAppointmentCriteria.ATTENDANCE_PERCENT.getCode())) + "%");
+        } else {
+            firstColumnContent = ConsoleUtil.formatBold("\uD83D\uDCC8 " + StatisticAppointmentCriteria.ATTENDANCE_PERCENT.getDisplayName() + ": ") + ConsoleUtil.formatGreen("0%");
+        }
+        if (statisticResult.containsKey(StatisticAppointmentCriteria.CANCELLED.getCode())) {
+            secondColumnContent = ConsoleUtil.formatBold("❌ " + StatisticAppointmentCriteria.CANCELLED.getDisplayName() + ": ")
+                    + ConsoleUtil.formatGreen(String.format("%.0f", statisticResult.get(StatisticAppointmentCriteria.CANCELLED.getCode())));
+        } else {
+            secondColumnContent = ConsoleUtil.formatBold("❌ " + StatisticAppointmentCriteria.CANCELLED.getDisplayName() + ": ") + ConsoleUtil.formatGreen("0");
+        }
+        CommonView.printOneLineTwoCol(firstColumnContent, secondColumnContent, maxLengthPerCol);
+
+        // RESCHEDULED and NO_SHOW
+        if (statisticResult.containsKey(StatisticAppointmentCriteria.NO_SHOW.getCode())) {
+            firstColumnContent = ConsoleUtil.formatBold("\uD83D\uDC64 " + StatisticAppointmentCriteria.NO_SHOW.getDisplayName() + ": ")
+                    + ConsoleUtil.formatGreen(String.format("%.0f", statisticResult.get(StatisticAppointmentCriteria.NO_SHOW.getCode())));
+        } else {
+            firstColumnContent = ConsoleUtil.formatBold("\uD83D\uDC64 " + StatisticAppointmentCriteria.NO_SHOW.getDisplayName() + ": ") + ConsoleUtil.formatGreen("0");
+        }
+        if (statisticResult.containsKey(StatisticAppointmentCriteria.RESCHEDULED.getCode())) {
+            secondColumnContent = ConsoleUtil.formatBold("⏰ " + StatisticAppointmentCriteria.RESCHEDULED.getDisplayName() + ": ")
+                    + ConsoleUtil.formatGreen(String.format("%.0f", statisticResult.get(StatisticAppointmentCriteria.RESCHEDULED.getCode())));
+        } else {
+            secondColumnContent = ConsoleUtil.formatBold("⏰ " + StatisticAppointmentCriteria.RESCHEDULED.getDisplayName() + ": ") + ConsoleUtil.formatGreen("0");
+        }
+        CommonView.printOneLineTwoCol(firstColumnContent, secondColumnContent, maxLengthPerCol);
+        System.out.println();
     }
 }

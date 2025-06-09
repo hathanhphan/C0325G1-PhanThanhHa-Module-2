@@ -59,12 +59,11 @@ public class DoctorRepositoryImpl implements DoctorRepository {
 
     @Override
     public List<DoctorEntity> findByKeyword(String keyword) {
+        String finalKeyword = keyword.toLowerCase();
         List<DoctorEntity> foundDoctors = new ArrayList<>();
-        foundDoctors.addAll(findByName(keyword));
-        foundDoctors.addAll(findByPhoneNumber(keyword));
-        try {
-            foundDoctors.addAll(findBySpecialization(DoctorSpecialization.from(keyword)));
-        } catch (IllegalArgumentException ignored) {}
+        foundDoctors.addAll(findByName(finalKeyword));
+        foundDoctors.addAll(findByPhoneNumber(finalKeyword));
+        foundDoctors.addAll(getCurrentList().stream().filter(d -> d.getSpecialization().getDisplayName().toLowerCase().contains(finalKeyword)).toList());
         DoctorEntity foundDoctorById = findById(keyword);
         if (foundDoctorById != null) {
             foundDoctors.add(foundDoctorById);

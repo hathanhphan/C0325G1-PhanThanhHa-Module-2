@@ -128,14 +128,26 @@ public class PatientController {
 
     private void displaySelectPatient(List<PatientEntity> patients) {
         System.out.println("Nhập [STT] tương ứng để tương tác chi tiết với bệnh nhân. Hoặc [ENTER] để tiếp tục...");
-        String input = CommonView.inputStringKeyword("Lựa chọn của bạn: ");
-        try {
-            int choice = Integer.parseInt(input);
-            if (choice >= 1 && choice <= patients.size()) {
-                patientView.showDetail(patients.get(choice - 1));
-                displayDetailMenu(patients.get(choice - 1));
+        String input;
+        int choice;
+        while (true) {
+            input = CommonView.inputStringKeyword("Lựa chọn của bạn: ");
+            if (input.isEmpty()) {
+                return;
             }
-        } catch (NumberFormatException ignored) {}
+            try {
+                choice = Integer.parseInt(input);
+                if (choice >= 1 && choice <= patients.size()) {
+                    patientView.showDetail(patients.get(choice - 1));
+                    displayDetailMenu(patients.get(choice - 1));
+                    return;
+                } else {
+                    ConsoleUtil.printlnRed("Vui lòng nhập lựa chọn của bạn là 1 số nguyên tương ứng với [STT]. Hoặc [ENTER] để tiếp tục...");
+                }
+            } catch (NumberFormatException e) {
+                ConsoleUtil.printlnRed("Vui lòng nhập lựa chọn của bạn là 1 số nguyên tương ứng với [STT]. Hoặc [ENTER] để tiếp tục...");
+            }
+        }
     }
 
     private void searchPatientById() {

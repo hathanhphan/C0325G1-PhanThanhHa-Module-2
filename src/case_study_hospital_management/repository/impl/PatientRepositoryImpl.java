@@ -43,7 +43,7 @@ public class PatientRepositoryImpl implements PatientRepository {
 
     @Override
     public List<PatientEntity> findByPhoneNumber(String phoneNumber) {
-        return getCurrentList().stream().filter(p -> p.getPhoneNumber().toLowerCase().contains(phoneNumber.toLowerCase())).toList();
+        return getCurrentList().stream().filter(p -> p.getPhoneNumber().contains(phoneNumber)).toList();
     }
 
     @Override
@@ -167,9 +167,7 @@ public class PatientRepositoryImpl implements PatientRepository {
     public Map<String, Integer> statisticByBloodType() {
         List<PatientEntity> patients = getCurrentList();
         return patients.stream()
-                .map(p -> {
-                    return p.getBloodType().getDisplayName();
-                })
+                .map(p -> p.getBloodType().getDisplayName())
                 .collect(Collectors.toMap(
                         group -> group,
                         group -> 1,

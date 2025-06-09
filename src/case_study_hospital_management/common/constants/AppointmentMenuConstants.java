@@ -25,4 +25,8 @@ public class AppointmentMenuConstants {
     public static final int DELETE_APPOINTMENT_IN_DETAIL = 4;
 
     // Statistic menu
+    public static final int STATISTIC_TODAY_APPOINTMENT = 1;
+    public static final int STATISTIC_APPOINTMENT_BY_DATE = 2;
+    public static final int STATISTIC_THIS_MONTH_APPOINTMENT = 3;
+    public static final int STATISTIC_APPOINTMENT_BY_MONTH = 4;
 }

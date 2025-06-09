@@ -3,7 +3,6 @@ package case_study_hospital_management.view;
 import case_study_hospital_management.common.constants.ConfigurationConstants;
 import case_study_hospital_management.common.constants.WorkingHoursConstants;
 import case_study_hospital_management.common.enums.DoctorSpecialization;
-import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.DoctorEntity;
 import case_study_hospital_management.util.ConsoleUtil;
 import case_study_hospital_management.util.DateUtil;
@@ -13,7 +12,6 @@ import ss12_java_collection_framework.bai_tap.student_management.util.ConsoleCol
 
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class DoctorView {

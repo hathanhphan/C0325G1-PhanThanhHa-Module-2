@@ -17,5 +17,10 @@ public interface AppointmentRepository extends IRepository<AppointmentEntity> {
     List<AppointmentEntity> findByKeywordOfDoctor(String keyword);
     List<AppointmentEntity> findByStatus(AppointmentStatus status);
     List<AppointmentEntity> findByDate(LocalDate appointmentDate);
+    List<AppointmentEntity> findByMonth(int month, int year);
     boolean reschedule(AppointmentEntity appointment, AppointmentEntity rescheduleAppointment);
+    Map<String, Double> statisticTodayAppointment();
+    Map<String, Double> statisticAppointmentByDate(LocalDate date);
+    Map<String, Double> statisticThisMonthAppointment();
+    Map<String, Double> statisticAppointmentByMonth(int month, int year);
 }

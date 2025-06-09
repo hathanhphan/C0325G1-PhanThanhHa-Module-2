@@ -70,16 +70,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<AppointmentEntity> findAllAppointmentByDoctorId(String id) {
-        return appointmentRepository.findAllAppointmentByDoctorId(id);
-    }
-
-    @Override
-    public List<AppointmentEntity> findAllAppointmentByPatientId(String id) {
-        return appointmentRepository.findAllAppointmentByPatientId(id);
-    }
-
-    @Override
     public List<AppointmentEntity> findByKeywordOfPatient(String keyword) {
         return appointmentRepository.findByKeywordOfPatient(keyword);
     }
@@ -105,5 +95,30 @@ public class AppointmentServiceImpl implements AppointmentService {
         rescheduleAppointment.setId(rescheduleId);
         appointment.setNewAppointmentId(rescheduleId);
         return appointmentRepository.reschedule(appointment, rescheduleAppointment);
+    }
+
+    @Override
+    public Map<String, Double> statisticTodayAppointment() {
+        return appointmentRepository.statisticTodayAppointment();
+    }
+
+    @Override
+    public Map<String, Double> statisticAppointmentByDate(LocalDate date) {
+        return appointmentRepository.statisticAppointmentByDate(date);
+    }
+
+    @Override
+    public Map<String, Double> statisticThisMonthAppointment() {
+        return appointmentRepository.statisticThisMonthAppointment();
+    }
+
+    @Override
+    public List<AppointmentEntity> findByMonth(int month, int year) {
+        return appointmentRepository.findByMonth(month, year);
+    }
+
+    @Override
+    public Map<String, Double> statisticAppointmentByMonth(int month, int year) {
+        return appointmentRepository.statisticAppointmentByMonth(month, year);
     }
 }

@@ -4,6 +4,7 @@ import case_study_hospital_management.common.constants.ConfigurationConstants;
 import case_study_hospital_management.common.constants.WorkingHoursConstants;
 import case_study_hospital_management.common.enums.AppointmentStatus;
 import case_study_hospital_management.common.enums.DoctorSpecialization;
+import case_study_hospital_management.common.enums.StatisticAppointmentCriteria;
 import case_study_hospital_management.entity.AppointmentEntity;
 import case_study_hospital_management.entity.DoctorEntity;
 import case_study_hospital_management.repository.AppointmentRepository;
@@ -140,6 +141,10 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
         LocalTime endTime = DateUtil.parseTime(workingTimes[1]);
         String appointmentTime;
         while (startTime != null && endTime != null && startTime.isBefore(endTime)) {
+            if (startTime.equals(DateUtil.parseTime(WorkingHoursConstants.STANDARD_START_BREAK_TIME))) {
+                startTime = DateUtil.parseTime(WorkingHoursConstants.STANDARD_END_BREAK_TIME);
+                continue;
+            }
             appointmentTime = DateUtil.formatTime(startTime) + "-" + DateUtil.formatTime(startTime.plusMinutes(WorkingHoursConstants.STANDARD_TIME_PER_APPOINTMENT));
             appointmentsPerDay.put(appointmentTime, true);
             startTime = startTime.plusMinutes(WorkingHoursConstants.STANDARD_TIME_PER_APPOINTMENT);
@@ -203,5 +208,63 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
         rescheduleAppointment.setPatient(patientRepository.findById(rescheduleAppointment.getPatientId()));
         rescheduleAppointment.setDoctor(doctorRepository.findById(rescheduleAppointment.getDoctorId()));
         return update(appointment) && save(rescheduleAppointment);
+    }
+
+    @Override
+    public Map<String, Double> statisticTodayAppointment() {
+        return statisticAppointmentByDate(LocalDate.now());
+    }
+
+    @Override
+    public Map<String, Double> statisticAppointmentByDate(LocalDate date) {
+        List<AppointmentEntity> appointments = findByDate(date);
+        return statisticAppointment(appointments);
+    }
+
+    @Override
+    public Map<String, Double> statisticThisMonthAppointment() {
+        List<AppointmentEntity> appointments = findByMonth(LocalDate.now().getMonthValue(), LocalDate.now().getYear());
+        return statisticAppointment(appointments);
+    }
+
+    @Override
+    public List<AppointmentEntity> findByMonth(int month, int year) {
+        List<AppointmentEntity> appointments = getCurrentList();
+        return appointments.stream().filter(a -> a.getAppointmentDate().getMonthValue() == month && a.getAppointmentDate().getYear() == year).toList();
+    }
+
+    @Override
+    public Map<String, Double> statisticAppointmentByMonth(int month, int year) {
+        List<AppointmentEntity> appointments = findByMonth(month, year);
+        return statisticAppointment(appointments);
+    }
+
+    private Map<String, Double> statisticAppointment(List<AppointmentEntity> appointments) {
+        Map<String, Double> result = appointments.stream().map(a -> a.getStatus().getCode())
+                .collect(Collectors.toMap(
+                        group -> group,
+                        group -> 1.0,
+                        Double::sum
+                ));
+        double total = appointments.size();
+        result.put(StatisticAppointmentCriteria.TOTAL.getCode(), total);
+        double percent = 0;
+        double attendancePercent = 100;
+        if (result.containsKey(StatisticAppointmentCriteria.COMPLETED.getCode())) {
+            percent = result.get(StatisticAppointmentCriteria.COMPLETED.getCode()) * 100 / total;
+            result.put(StatisticAppointmentCriteria.COMPLETED_PERCENT.getCode(), percent);
+        }
+        if (result.containsKey(StatisticAppointmentCriteria.CANCELLED.getCode())) {
+            percent = result.get(StatisticAppointmentCriteria.CANCELLED.getCode()) * 100 / total;
+            result.put(StatisticAppointmentCriteria.CANCELLED_PERCENT.getCode(), percent);
+            attendancePercent -= percent;
+        }
+        if (result.containsKey(StatisticAppointmentCriteria.RESCHEDULED.getCode())) {
+            percent = result.get(StatisticAppointmentCriteria.RESCHEDULED.getCode()) * 100 / total;
+            result.put(StatisticAppointmentCriteria.RESCHEDULED_PERCENT.getCode(), percent);
+            attendancePercent -= percent;
+        }
+        result.put(StatisticAppointmentCriteria.ATTENDANCE_PERCENT.getCode(), attendancePercent);
+        return result;
     }
 }

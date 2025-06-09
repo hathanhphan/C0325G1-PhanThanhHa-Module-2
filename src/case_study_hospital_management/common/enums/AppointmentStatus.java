@@ -3,6 +3,7 @@ package case_study_hospital_management.common.enums;
 public enum AppointmentStatus {
     SCHEDULED("Đã đặt lịch", "SCHEDULED"),
     COMPLETED("Đã hoàn thành", "COMPLETED"),
+    EXAMINATION("Đang khám", "EXAMINATION"),
     CANCELLED("Đã huỷ", "CANCELLED"),
     NO_SHOW("Không đến khám", "NO_SHOW"),
     RESCHEDULED("Đã dời lịch", "RESCHEDULED"),

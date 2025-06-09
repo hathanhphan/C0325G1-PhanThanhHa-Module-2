@@ -130,4 +130,10 @@ public class CommonView {
             System.out.println();
         }
     }
+
+    public static void printOneLineTwoCol(String firstColumn, String secondColumn, int lengthPerColumn) {
+        System.out.printf("%-" + lengthPerColumn + "s", firstColumn);
+        System.out.printf("%-" + lengthPerColumn + "s", secondColumn);
+        System.out.println();
+    }
 }
